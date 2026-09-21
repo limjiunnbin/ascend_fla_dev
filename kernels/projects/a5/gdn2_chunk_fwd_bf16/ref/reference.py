@@ -23,9 +23,11 @@ def make_inputs(case: dict[str, Any]) -> dict[str, torch.Tensor]:
     generator = torch.Generator().manual_seed(int(case["seed"]))
     shape = (batch, time, heads, HEAD_DIM)
 
-    q = torch.randn(shape, generator=generator, dtype=torch.float32) * 0.5
-    k = torch.randn(shape, generator=generator, dtype=torch.float32) * 0.5
-    v = torch.randn(shape, generator=generator, dtype=torch.float32) * 0.25
+    # Same draw order and scales as the FP32 unit, then rounded: the BF16 path's public ABI is BF16
+    # q/k/v, so the rounding belongs to input generation, not to a host conversion.
+    q = (torch.randn(shape, generator=generator, dtype=torch.float32) * 0.5).bfloat16()
+    k = (torch.randn(shape, generator=generator, dtype=torch.float32) * 0.5).bfloat16()
+    v = (torch.randn(shape, generator=generator, dtype=torch.float32) * 0.25).bfloat16()
     g = -torch.rand(shape, generator=generator, dtype=torch.float32) * gate_scale
     erase_gate = torch.rand(shape, generator=generator, dtype=torch.float32) * erase_scale
     w = torch.rand(shape, generator=generator, dtype=torch.float32)
@@ -64,10 +66,12 @@ def validate_inputs(inputs: dict[str, torch.Tensor], case: dict[str, Any] | None
     expected = (batch, time, heads, HEAD_DIM)
     if batch != 1 or not 1 <= time <= 4096 or heads not in (1, 16) or width != HEAD_DIM:
         raise ValueError(f"outside declared B/T/H/D domain: {tuple(q.shape)}")
+    # BF16 path: q/k/v are BF16; the gates, w and the state stay FP32.
     for name in ("k", "v", "g", "erase_gate", "w"):
         tensor = inputs[name]
-        if tuple(tensor.shape) != expected or tensor.dtype != torch.float32:
-            raise ValueError(f"{name} must be float32 {expected}, got {tensor.dtype} {tuple(tensor.shape)}")
+        want = torch.bfloat16 if name in ("k", "v") else torch.float32
+        if tuple(tensor.shape) != expected or tensor.dtype != want:
+            raise ValueError(f"{name} must be {want} {expected}, got {tensor.dtype} {tuple(tensor.shape)}")
         if not tensor.is_contiguous():
             raise ValueError(f"{name} must be contiguous")
     state = inputs["initial_state"]
@@ -76,8 +80,8 @@ def validate_inputs(inputs: dict[str, torch.Tensor], case: dict[str, Any] | None
         raise ValueError(
             f"initial_state must be float32 {state_shape}, got {state.dtype} {tuple(state.shape)}"
         )
-    if q.dtype != torch.float32 or not q.is_contiguous() or not state.is_contiguous():
-        raise ValueError("q and initial_state must be contiguous float32 tensors")
+    if q.dtype != torch.bfloat16 or not q.is_contiguous() or not state.is_contiguous():
+        raise ValueError("q must be a contiguous bfloat16 tensor and initial_state a contiguous float32 one")
     if not all(bool(torch.isfinite(tensor).all()) for tensor in inputs.values()):
         raise ValueError("inputs must be finite")
     if bool((inputs["g"] > 0).any()):
@@ -92,9 +96,11 @@ def validate_inputs(inputs: dict[str, torch.Tensor], case: dict[str, Any] | None
 
 def reference(inputs: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
     validate_inputs(inputs)
-    q = inputs["q"]
-    k = inputs["k"]
-    v = inputs["v"]
+    # The reference widens the BF16 inputs once and runs the same FP32 recurrence as the FP32 unit;
+    # o is rounded to BF16 at the end because that is what the kernel writes.
+    q = inputs["q"].float()
+    k = inputs["k"].float()
+    v = inputs["v"].float()
     g = inputs["g"]
     erase_gate = inputs["erase_gate"]
     w = inputs["w"]
@@ -113,7 +119,7 @@ def reference(inputs: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         delta = w[:, index] * v[:, index] - erase
         state = state + k_t.unsqueeze(-1) * delta.unsqueeze(-2)
         outputs.append(torch.matmul(q_t.unsqueeze(-2), state).squeeze(-2))
-    return {"o": torch.stack(outputs, dim=1), "final_state": state}
+    return {"o": torch.stack(outputs, dim=1).bfloat16(), "final_state": state}
 
 
 def validate_reference(
@@ -129,9 +135,10 @@ def validate_reference(
     }
     if set(outputs) != set(expected):
         raise ValueError(f"reference outputs must be {sorted(expected)}, got {sorted(outputs)}")
+    want = {"o": torch.bfloat16, "final_state": torch.float32}
     for name, shape in expected.items():
         tensor = outputs[name]
-        if tuple(tensor.shape) != shape or tensor.dtype != torch.float32:
-            raise ValueError(f"{name} must be float32 {shape}")
+        if tuple(tensor.shape) != shape or tensor.dtype != want[name]:
+            raise ValueError(f"{name} must be {want[name]} {shape}")
         if not bool(torch.isfinite(tensor).all()):
             raise ValueError(f"{name} contains non-finite values")

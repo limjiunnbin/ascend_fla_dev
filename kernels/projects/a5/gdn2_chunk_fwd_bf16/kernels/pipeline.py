@@ -32,10 +32,12 @@ def run(inputs, launch, *, retain_stages=True):
     shapes.update(lower=(*base, 64, 64), score=(*base, 64, 64),
                   states=(*base, 128, 128), o=(batch, time, heads, 128),
                   final_state=(batch, heads, 128, 128))
+    # o is the only BF16 output; every chain-internal checkpoint stays FP32, as in the FP32 unit.
+    dtypes = {'o': torch.bfloat16}
     values = dict(inputs)
     checkpoints = {}
     for index, (entry, (_, names, outputs)) in enumerate(zip(entries(), GRAPH)):
-        fresh = {name: torch.empty(shapes[name], dtype=torch.float32,
+        fresh = {name: torch.empty(shapes[name], dtype=dtypes.get(name, torch.float32),
                                   device=inputs['q'].device) for name in outputs}
         if inputs['q'].device.type == 'cpu':
             for tensor in fresh.values():
