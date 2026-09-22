@@ -86,7 +86,7 @@ def prepare_row(q: Tensor, k: Tensor, v: Tensor, g: Tensor, b: Tensor,
 
 
 @kernel()
-def gdn2_chunk_prepare(
+def gdn2_chunk_prepare_bf16(
     q: GM[bf16, ("B", "T", "H", 128)], k: GM[bf16, ("B", "T", "H", 128)],
     v: GM[bf16, ("B", "T", "H", 128)], g: GM[f32, ("B", "T", "H", 128)],
     erase_gate: GM[f32, ("B", "T", "H", 128)], w: GM[f32, ("B", "T", "H", 128)],
@@ -178,7 +178,7 @@ def scores_vf(q: Tensor, k: Tensor, g: Tensor, b: Tensor, lower: Tensor,
 
 
 @kernel()
-def gdn2_chunk_scores(
+def gdn2_chunk_scores_bf16(
     qn: GM[f32, ("B", "N", "H", 64, 128)], kn: GM[f32, ("B", "N", "H", 64, 128)],
     gc: GM[f32, ("B", "N", "H", 64, 128)], bk: GM[f32, ("B", "N", "H", 64, 128)],
     lower: GM[f32, ("B", "N", "H", 64, 64)], score: GM[f32, ("B", "N", "H", 64, 64)],
@@ -274,7 +274,7 @@ def wy_vf(lower: Tensor, g: Tensor, b: Tensor, v: Tensor,
 
 
 @kernel()
-def gdn2_chunk_wy(
+def gdn2_chunk_wy_bf16(
     lower: GM[f32, ("B", "N", "H", 64, 64)], gc: GM[f32, ("B", "N", "H", 64, 128)],
     bk: GM[f32, ("B", "N", "H", 64, 128)], wv: GM[f32, ("B", "N", "H", 64, 128)],
     u: GM[f32, ("B", "N", "H", 64, 128)], wy: GM[f32, ("B", "N", "H", 64, 128)],
@@ -355,7 +355,7 @@ def scan_vf(state: Tensor, k: Tensor, g: Tensor, u: Tensor,
 
 
 @kernel()
-def gdn2_chunk_scan(
+def gdn2_chunk_scan_bf16(
     kn: GM[f32, ("B", "N", "H", 64, 128)], gc: GM[f32, ("B", "N", "H", 64, 128)],
     u: GM[f32, ("B", "N", "H", 64, 128)], wy: GM[f32, ("B", "N", "H", 64, 128)],
     initial_state: GM[f32, ("B", "H", 128, 128)],
@@ -421,7 +421,7 @@ def output_vf(q: Tensor, g: Tensor, score: Tensor, state: Tensor,
 
 
 @kernel()
-def gdn2_chunk_output(
+def gdn2_chunk_output_bf16(
     qn: GM[f32, ("B", "N", "H", 64, 128)], gc: GM[f32, ("B", "N", "H", 64, 128)],
     score: GM[f32, ("B", "N", "H", 64, 64)], states: GM[f32, ("B", "N", "H", 128, 128)],
     delta: GM[f32, ("B", "N", "H", 64, 128)], o: GM[bf16, ("B", "T", "H", 128)],
@@ -457,5 +457,5 @@ def gdn2_chunk_output(
     return o
 
 
-STAGES = (gdn2_chunk_prepare, gdn2_chunk_scores, gdn2_chunk_wy,
-          gdn2_chunk_scan, gdn2_chunk_output)
+STAGES = (gdn2_chunk_prepare_bf16, gdn2_chunk_scores_bf16, gdn2_chunk_wy_bf16,
+          gdn2_chunk_scan_bf16, gdn2_chunk_output_bf16)
