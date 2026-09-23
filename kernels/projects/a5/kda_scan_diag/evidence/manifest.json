@@ -2129,6 +2129,10 @@
     "closeout/capture-correspondence.json": {
       "sha256": "36532ee4192b8061194ce36e7e9edbb31620912587aaa59d8a19919e59cc41c2",
       "bytes": 6678
+    },
+    "closeout/public-delivery-restoration.json": {
+      "sha256": "18c72391670c31331f6b30b5886e30396a99e46faa31d197f371e15bd71bb13a",
+      "bytes": 122381
     }
   },
   "scope": "Completed stages only; model/historical/native categories remain distinct. No production repair claim."
