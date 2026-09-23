@@ -69,6 +69,26 @@
   ],
   "restored_files": 6923,
   "privacy": "Archives remain private; only exact content identities and recovery outcomes published.",
-  "cross_off_host_backup": "Additional transfer still in progress; complete source archive and independent restored directory verified in assigned Docker. No completed off-host cross copy claimed.",
-  "raw_receipt_sha256": "58c1b5065eada5112673100e969abda9fa0db4cb51c1f4d46818bc8826de7cc2"
+  "cross_off_host_backup": "Complete: incremental archive and existing native archive reconstruct all2281 original cross-environment files with exact original manifest SHA256/size match.",
+  "off_host_cross_restoration": {
+    "schema": "a5k03.offhost-incremental-restoration/1",
+    "utc": "2026-09-23T15:24:12.567468+00:00",
+    "complete": true,
+    "delta_archive": {
+      "archive": "cross-delta-v1.tar.xz",
+      "bytes": 81473264,
+      "sha256": "59a723fb77225cba3399563ee2df8e6dfa3a8d4de74163c5e9fb9285e84b09fb",
+      "files": 2281,
+      "new_chunks": 2394,
+      "new_chunk_bytes": 150416793,
+      "base_archive_sha256": "160abf9ea063aabca25f754e42f876473d606511547da55cf3ad63b0e03d68c0",
+      "utc": "2026-09-23T15:21:19.355901+00:00"
+    },
+    "base_archive_sha256": "160abf9ea063aabca25f754e42f876473d606511547da55cf3ad63b0e03d68c0",
+    "restored_files": 2281,
+    "exact_original_manifest_match": true,
+    "cross_original_manifest_sha256": "613d82bd9a183259f2cbc5bfa34d2833a4407accfb075ea14e8d3a92949f96e9",
+    "note": "Downloaded incremental archive plus already downloaded native archive reconstruct every byte of all original cross-environment files; whole-file SHA256/size checked against independently recorded original cross manifest. Full tar byte stream need not be duplicated."
+  },
+  "raw_receipt_sha256": "30ce2265761df9461ca70458ac72857c4ec9108c2f832967714c96f0eb72434b"
 }

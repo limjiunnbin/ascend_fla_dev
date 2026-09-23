@@ -219,8 +219,10 @@ BHV0/2/4/6；同一个无拟合 seed 替换预测各解释 65,491 个，余下�
 
 归档收尾：[archive-restoration.json](../../kernels/projects/a5/kda_scan_diag/evidence/closeout/archive-restoration.json)
 记录三份私有归档的哈希及 6,923 个文件的恢复核验。原环境归档已传回并恢复；
-跨环境归档在分配的 Docker 内恢复到新目录逐文件核验，另行异地备份仍在传输，
-不宣称该附加备份完成。模型、trace、生成源码、旧版实际运行脚本及失败记录另行归档。
+跨环境归档先在分配的 Docker 内恢复到新目录逐文件核验；随后异地增量备份也完成，
+81,473,264 字节增量包加既有原环境归档，可恢复全部 2,281 个跨环境文件，
+每个文件均与原始清单的 SHA256/大小一致。模型、trace、生成源码、旧版实际运行脚本
+及失败记录另行归档。
 [capture-correspondence.json](../../kernels/projects/a5/kda_scan_diag/evidence/closeout/capture-correspondence.json)
 核对恢复后的 264 份 anchor、1,350 份偏差/错误 trial 与全部四输出哈希、
 差异元素计数及逐行形态；包含稳定重复的错误，未仅检查文件存在。

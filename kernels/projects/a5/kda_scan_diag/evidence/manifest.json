@@ -2123,16 +2123,16 @@
       "bytes": 4720
     },
     "closeout/archive-restoration.json": {
-      "sha256": "8e345bd8c328027f6376e4d68e038a150b0d5cb27c3e99b77ffc28d0276b38e7",
-      "bytes": 3502
+      "sha256": "1b4b1e715095d72cb5afb67f565aae80d263327385e0f551c21f42eb0701ea24",
+      "bytes": 4618
     },
     "closeout/capture-correspondence.json": {
       "sha256": "36532ee4192b8061194ce36e7e9edbb31620912587aaa59d8a19919e59cc41c2",
       "bytes": 6678
     },
     "closeout/public-delivery-restoration.json": {
-      "sha256": "18c72391670c31331f6b30b5886e30396a99e46faa31d197f371e15bd71bb13a",
-      "bytes": 122381
+      "sha256": "0e782b44b8aab998667137bad2c7ee43d8b7807b0f56452a97c635ba5bd24429",
+      "bytes": 122548
     }
   },
   "scope": "Completed stages only; model/historical/native categories remain distinct. No production repair claim."

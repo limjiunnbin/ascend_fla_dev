@@ -1,17 +1,16 @@
 {
   "schema": "a5k03.public-delivery-restoration/1",
-  "utc": "2026-09-23T15:09:59.620284+00:00",
-  "archive": "public-delivery-v1.tar.xz",
-  "sha256": "61ff1ec6c425458d906944486e170b1278e1072f5f58c05048fe737d9827737c",
-  "bytes": 2161944,
-  "restored_files": 552,
+  "utc": "2026-09-23T15:25:41.060589+00:00",
+  "archive": "public-delivery-v2.tar.xz",
+  "sha256": "1dee94763829bf5304c252383432a13c987c48c860c786d11be3d18d60213bd3",
+  "bytes": 2166216,
+  "restored_files": 553,
   "exact_manifest_match": true,
-  "private_values_absent": true,
-  "scope": "Exact shareable snapshot before adding this restoration receipt and refreshing evidence/manifest.json. Kernel, diagnostic code, tests and research report unchanged by the subsequent index update.",
+  "scope": "Exact shareable snapshot before refreshing this restoration receipt and evidence/manifest.json. Kernel, diagnostic code, tests and research report unchanged by the subsequent index update.",
   "files": {
     "docs/research/kda_scan_dh0_nondeterminism.md": {
-      "sha256": "3ef810a8183a659c1747724dc4615ee502fbc878b25da5549b0cd80c798dd260",
-      "bytes": 16065
+      "sha256": "7ab58187e3f33523c7413d79d2e15f81946d285c390a13836bc722cbd6ec62ca",
+      "bytes": 16192
     },
     "kernels/projects/a5/kda_scan_diag/README.md": {
       "sha256": "be0a637d7295e5243211123682bdea3736b3ecc5e06b3eff6c49c5e84b7502ef",
@@ -34,8 +33,8 @@
       "bytes": 1646
     },
     "kernels/projects/a5/kda_scan_diag/evidence/closeout/archive-restoration.json": {
-      "sha256": "8e345bd8c328027f6376e4d68e038a150b0d5cb27c3e99b77ffc28d0276b38e7",
-      "bytes": 3502
+      "sha256": "1b4b1e715095d72cb5afb67f565aae80d263327385e0f551c21f42eb0701ea24",
+      "bytes": 4618
     },
     "kernels/projects/a5/kda_scan_diag/evidence/closeout/capture-correspondence.json": {
       "sha256": "36532ee4192b8061194ce36e7e9edbb31620912587aaa59d8a19919e59cc41c2",
@@ -44,6 +43,10 @@
     "kernels/projects/a5/kda_scan_diag/evidence/closeout/host-checks.json": {
       "sha256": "b37953c66836000a2f19f98bd8545ee81457a0203bc3b5a7dce39549b4666f23",
       "bytes": 4720
+    },
+    "kernels/projects/a5/kda_scan_diag/evidence/closeout/public-delivery-restoration.json": {
+      "sha256": "18c72391670c31331f6b30b5886e30396a99e46faa31d197f371e15bd71bb13a",
+      "bytes": 122381
     },
     "kernels/projects/a5/kda_scan_diag/evidence/closeout/source-delivery.json": {
       "sha256": "31e76794fd236b3e4944d63df155bfae3aad1982dc8ff23e6f953c1876267140",
@@ -66,8 +69,8 @@
       "bytes": 7651
     },
     "kernels/projects/a5/kda_scan_diag/evidence/manifest.json": {
-      "sha256": "d0a236d4adc7e6935dbc2b870d331a6b9271fdc1b92075b6b4b5695277e24d94",
-      "bytes": 95584
+      "sha256": "f9aaf64b15969649d2a75b3010d0cd0be50de7dda6eab6ed737f44eec691f403",
+      "bytes": 95748
     },
     "kernels/projects/a5/kda_scan_diag/evidence/models/model-baseline-b1h2c3bd1/capture-index.json": {
       "sha256": "dacf13ba845744a0ff9f27afaec09d21d2009bf288ccaa1a4defca1edc0b593d",
@@ -2218,5 +2221,5 @@
       "bytes": 3525
     }
   },
-  "raw_receipt_sha256": "1a0f431eed05e7c5268bd4c0a075e7f725a8154fa55a72f8c70dd6718078a826"
+  "raw_receipt_sha256": "7b817eb6ad954c302b051594a3af38b8067f572d3c570dabd5dfdc99723fba40"
 }
