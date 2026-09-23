@@ -44,16 +44,31 @@ B1/T128/H1/HV2、宽门控跨度 B1/T64。**最大的 C 是 2，最大的 H/HV �
     python benchmarks/verify_real_shapes.py --check bitwise          # 自动派 bd=1/bd=4 两个子进程
     python benchmarks/verify_real_shapes.py --check gqa
     python benchmarks/verify_real_shapes.py --check bwd --span 46
+
+A2 单元资格化（先在私有配置中选定健康空闲卡，并在共享设备锁内执行）::
+
+    python benchmarks/verify_real_shapes.py --check a2-unit --block-dim 1 \
+        --a2-launcher bridge --a2-output tmp/a2-real-bd1
+    python benchmarks/verify_real_shapes.py --check a2-unit --block-dim 2 \
+        --a2-launcher bridge --a2-suite defaults --a2-seeds 0 1 2 3 4 5 6 7 \
+        --a2-lengths 4096 --a2-output tmp/a2-defaults-bd2
+
+A2 使用已合入的 a2.kda_fwd_stable 单元，保留公共入口的 qualified=False。
+range 模式逐点保留有限性与数值失败，不把观察到的失败当成支持范围。
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
+import math
+import os
 import pathlib
 import subprocess
 import sys
 import tempfile
+import time
 
 import torch
 
@@ -336,11 +351,289 @@ def check_bwd(args) -> int:
     return 1 if over else 0
 
 
+# ---------------------------------------------------------------------- A2 unit
+# A2 qualification uses the A2-03 unit directly. The public KDA entry is still
+# unqualified and selects A5 definitions; this tool never changes that gate.
+A2_PINS = {
+    "library": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+    "kernels": "b3b3f9c16df7c4626ed3c081032a1be5a753d0b1",
+    "fla": "e52dbc0ea19d3a40d7ab7f9eed855d2b473994d2",
+}
+
+
+def _a2_load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _a2_unit():
+    root = pathlib.Path(__file__).resolve().parents[1]
+    directory = root / "kernels/projects/a2/kda_fwd_stable"
+    workspace = pathlib.Path(os.environ["ASCRIPTOR_WORKSPACE"])
+    runner_path = workspace / "kernels/tools/unit_runner.py"
+    expected = json.loads((directory / "runner-source.json").read_text())["sha256"]
+    if hashlib.sha256(runner_path.read_bytes()).hexdigest() != expected:
+        raise RuntimeError("A2 unit runner does not match its owner source receipt")
+    runner = _a2_load("_unit_runner", runner_path)
+    previous_reference = sys.modules.get("reference")
+    reference = _a2_load("reference", directory / "reference.py")
+    try:
+        unit = _a2_load("_a212_kda_unit", directory / "unit.py")
+    finally:
+        if previous_reference is None:
+            sys.modules.pop("reference", None)
+        else:
+            sys.modules["reference"] = previous_reference
+    return unit, runner, reference
+
+
+def a2_metrics(actual, expected):
+    """FP32 comparison; finite and in-budget are deliberately separate facts."""
+    a, e = actual.detach().cpu().float(), expected.detach().cpu().float()
+    finite = bool(torch.isfinite(a).all() and torch.isfinite(e).all())
+    if not finite:
+        return dict(finite=False, relative_l2=None, max_abs_diff=None, ok=False)
+    # Values are judged after FP32 conversion; FP64 norm accumulation prevents
+    # a tiny nonzero error against an exact zero reference from underflowing.
+    residual, denominator = float((a.double() - e.double()).norm()), float(e.double().norm())
+    relative = residual / denominator if denominator else (0.0 if residual == 0 else None)
+    return dict(finite=True, relative_l2=relative, max_abs_diff=float((a - e).abs().max()),
+                ok=relative is not None and relative <= BUDGET["o"])
+
+
+def _a2_hash(value):
+    return hashlib.sha256(value.detach().cpu().contiguous().view(torch.uint8).numpy().tobytes()).hexdigest()
+
+
+def _a2_model_shape():
+    root = pathlib.Path(__file__).resolve().parents[1]
+    model = next(m for m in json.loads((root / "docs/matrix/models.json").read_text())["models"]
+                 if m["id"] == "kimi-linear-48b-a3b")
+    shape = model["shape"]
+    assert (shape["num_key_heads"], shape["num_value_heads"],
+            shape["head_k_dim"], shape["head_v_dim"]) == (32, 32, 128, 128)
+    return shape
+
+
+def a2_default_gate(t, seed, target=None):
+    """CPU-generated layer initialization, never claimed to be trained weights.
+
+    Use the repository's Kimi layer at the recorded real hidden/head dimensions.
+    Its A_log and inverse-softplus dt initialization match the pinned FLA source.
+    Calibration shifts A_log, preserving the raw-gate distribution for that seed.
+    """
+    from ascend_fla.layers.kda import KimiDeltaAttention
+
+    shape = _a2_model_shape()
+    with torch.random.fork_rng(devices=[]), torch.no_grad():
+        torch.manual_seed(seed)
+        layer = KimiDeltaAttention(hidden_size=shape["hidden_size"], head_dim=128,
+                                   num_heads=32, num_v_heads=32, dtype=torch.float32)
+        generator = torch.Generator().manual_seed(1000 + seed)
+        hidden = torch.randn(1, t, shape["hidden_size"], generator=generator) * .5
+        gate = layer._gate(hidden, 1, t).contiguous()
+        original = _gate_span(gate, t // 64, on_cpu=True)
+        if target is not None:
+            if not math.isfinite(target) or target <= 0:
+                raise ValueError("A2 target span must be finite and positive")
+            layer.A_log.add_(math.log(target / original))
+            gate = layer._gate(hidden, 1, t).contiguous()
+        measured = _gate_span(gate, t // 64, on_cpu=True)
+        if target is not None and not math.isclose(measured, target, rel_tol=2e-6):
+            raise AssertionError(f"A_log calibration missed target: {measured} vs {target}")
+        return gate, {"initialization_span": original, "measured_span": measured,
+                      "target_span": target, "hidden_size": shape["hidden_size"]}
+
+
+def _a2_environment(unit):
+    import ascriptor
+    import torch_npu
+
+    workspace = pathlib.Path(os.environ["ASCRIPTOR_WORKSPACE"]).resolve()
+    if not pathlib.Path(ascriptor.__file__).resolve().is_relative_to(workspace / "library"):
+        raise RuntimeError("Actual ascriptor import is outside the selected library")
+    for name, expected in A2_PINS.items():
+        actual = subprocess.check_output(["git", "-C", str(workspace / name), "rev-parse", "HEAD"], text=True).strip()
+        dirty = subprocess.check_output(["git", "-C", str(workspace / name), "status", "--porcelain"], text=True)
+        if actual != expected or dirty:
+            raise RuntimeError(f"Selected {name} source identity is not the clean task pin")
+    oracle = pathlib.Path(os.environ["FLA_KDA_NAIVE"]).resolve()
+    if oracle != workspace / "fla/fla/ops/kda/naive.py":
+        raise RuntimeError("Actual FLA oracle must be the selected clean pin source")
+    cann = pathlib.Path(os.environ["ASCEND_HOME_PATH"])
+    versions = {}
+    for name in ("compiler/version.info", "opp/version.info"):
+        path = cann / name
+        raw = path.read_bytes()
+        fields = dict(line.split("=", 1) for line in raw.decode().splitlines() if "=" in line)
+        # Version/time fields are shareable; installation and host paths are not.
+        versions[name] = {"sha256": hashlib.sha256(raw).hexdigest(),
+                          "fields": {k: v for k, v in fields.items()
+                                     if any(tag in k.lower() for tag in ("version", "timestamp"))}}
+    source_files = [pathlib.Path(unit.__file__), pathlib.Path(__file__),
+                    *sorted((pathlib.Path(unit.__file__).parent / "kernels").glob("*.py"))]
+    root = pathlib.Path(__file__).resolve().parents[1]
+    source_files += [pathlib.Path(unit.__file__).parent / "reference.py",
+                     root / "ascend_fla/reference/kda.py", root / "ascend_fla/runtime/compile.py",
+                     root / "ascend_fla/runtime/binding.py", root / "benchmarks/a2/bringup.py"]
+    chip = torch.npu.get_device_name(0)
+    if "910B" not in chip.upper():
+        raise RuntimeError("A2 qualification requires a measured 910B device")
+    return {"soc": "a2", "chip": chip, "python": sys.version.split()[0],
+            "torch": torch.__version__, "torch_npu": torch_npu.__version__,
+            "repo_head": subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip(),
+            "source_pins": A2_PINS, "cann": versions,
+            "fla_oracle_sha256": hashlib.sha256(oracle.read_bytes()).hexdigest(),
+            "opp_packages": sorted(p.name for p in (cann / "opp/built-in/op_impl/ai_core/tbe/kernel").iterdir()
+                                   if p.is_dir() and p.name.startswith("ascend")),
+            "source_sha256": {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                              for p in source_files}}
+
+
+def _a2_measure_sandwich(unit, inputs, options, x, *, warmup=3, repeat=20):
+    """Same-card, synchronized wall time of the two CPU-input/device-output tools.
+
+    Both timed paths include allocation and H2D. The candidate is the existing
+    five-launch unit adapter, not the unqualified public API or a kernel-only
+    latency. Generation, CPU oracle, D2H comparison and compilation are outside.
+    """
+    from ascend_fla.reference.kda import kda_chunk_vectorized
+
+    def candidate():
+        got = unit._execute_chain(inputs, options)
+        return got["o"], got["final_state"]
+
+    def baseline():
+        dev = to_npu(x)
+        return kda_chunk_vectorized(
+            *(dev[n] for n in ("q", "k", "v", "g", "beta")),
+            initial_state=dev["h0"], output_final_state=True)
+
+    reference = ref_fwd(x)
+    checks = {}
+    for name, call in (("candidate", candidate), ("baseline", baseline)):
+        got = call()
+        torch.npu.synchronize()
+        checks[name] = {key: a2_metrics(value, expected)
+                        for key, value, expected in zip(("o", "final_state"), got, reference)}
+        assert all(v["ok"] for v in checks[name].values()), f"{name} timing baseline is numerically invalid"
+    samples = []
+    for round_id in range(3):
+        for position, call in (("baseline_before", baseline), ("candidate", candidate), ("baseline_after", baseline)):
+            for _ in range(warmup):
+                call()
+            torch.npu.synchronize()
+            values = []
+            for _ in range(repeat):
+                torch.npu.synchronize()
+                start = time.perf_counter()
+                call()
+                torch.npu.synchronize()
+                values.append((time.perf_counter() - start) * 1000)
+            samples.append({"round": round_id, "position": position, "wall_ms": values})
+    return {"scope": "CPU prepared inputs to device outputs; allocations and H2D included; not public-op latency",
+            "baseline": "torch_npu kda_chunk_vectorized", "synchronized": True,
+            "warmup_per_phase": warmup, "repeat_per_phase": repeat, "rounds": 3,
+            "correctness": checks, "samples": samples}
+
+
+def check_a2_unit(args):
+    """Real A2 unit validation, separate from the unqualified public op entry.
+
+    Execute under an external shared device lease with isolated build/cache paths.
+    Each block_dim is a different process. Inputs and all references are generated
+    on this machine; CPU tensor preparation belongs to the test input generator.
+    """
+    if args.block_dim not in (1, 2):
+        raise ValueError("A2-12 only qualifies block_dim 1 and 2")
+    if args.a2_output is None:
+        raise ValueError("--a2-output is required for retained raw receipts")
+    if any(t <= 0 or t > 4096 or t % 64 for t in args.a2_lengths):
+        raise ValueError("A2-12 lengths must be positive multiples of 64, at most 4096")
+    if args.a2_suite == "performance" and args.a2_launcher != "bridge":
+        raise ValueError("A2 timing requires the bridge; harness file transport is not timed")
+    directory = pathlib.Path(args.a2_output)
+    directory.mkdir(parents=True, exist_ok=True)
+    unit, runner, independent = _a2_unit()
+    environment = _a2_environment(unit)
+    print("A2_ENVIRONMENT", json.dumps(environment), flush=True)
+    (directory / "environment.json").write_text(json.dumps(environment, indent=2) + "\n")
+    oracle = _a2_load("_a212_fla_naive", pathlib.Path(os.environ["FLA_KDA_NAIVE"]))
+    if args.a2_launcher == "bridge":
+        from ascend_fla.runtime.compile import compile_kernel
+        adapter = _a2_load("_a212_bridge", pathlib.Path(__file__).parent / "a2/bringup.py")
+        for kernel in unit._kernels().values():
+            compile_kernel(kernel, device="a2", block_dim=args.block_dim, backend="cce")
+        runner.launch_kernel = adapter._bridge_launch_kernel
+    else:
+        adapter = None
+    results = []
+    for t in args.a2_lengths:
+        for seed in args.a2_seeds:
+            targets = [None] if args.a2_suite == "defaults" else args.a2_spans
+            for span in targets:
+                case_id = f"t{t}_seed{seed}_span{span}"
+                gate, calibration = a2_default_gate(t, seed, span)
+                x = make_inputs(1, 32, 32, t // 64, 8., seed=seed)
+                x["g"] = gate
+                inputs = dict(q=x["q"], k=x["k"], v=x["v"], g_raw=x["g"],
+                              beta=x["beta"], initial_state=x["h0"])
+                unit.validate_inputs(inputs)
+                before = {n: _a2_hash(v) for n, v in inputs.items()}
+                options = dict(device="a2", backend="cce", block_dim=args.block_dim,
+                               launcher="aclnn", board=None, timeout=900,
+                               out_dir=str(directory / "build"))
+                if adapter:
+                    adapter._BRIDGE_TRACE.clear()
+                print("A2_CASE_START", case_id, json.dumps(calibration), flush=True)
+                started = time.perf_counter()
+                got = unit._execute_chain(inputs, options)
+                torch.npu.synchronize()
+                wall = time.perf_counter() - started
+                want_o, want_h = ref_fwd(x)
+                fla_o, fla_h = oracle.naive_recurrent_kda(
+                    *(x[n].float() for n in ("q", "k", "v", "g", "beta")),
+                    initial_state=x["h0"].float(), output_final_state=True)
+                comparisons = {"o": a2_metrics(got["o"], want_o),
+                               "final_state": a2_metrics(got["final_state"], want_h)}
+                oracle_checks = {"o": a2_metrics(want_o, fla_o), "final_state": a2_metrics(want_h, fla_h)}
+                transposed = independent.independent_reference(x)
+                independent_checks = {"o": a2_metrics(transposed["o"], fla_o),
+                                      "final_state": a2_metrics(transposed["final_state"], fla_h)}
+                unchanged = before == {n: _a2_hash(v) for n, v in inputs.items()}
+                row = dict(id=case_id, shape=[1, t, 32, 32, 128, 128], block_dim=args.block_dim,
+                           input_dtype="qkv=bf16;g,beta,h0=fp32", calibration=calibration,
+                           comparison=comparisons, cpu_vs_fla=oracle_checks,
+                           independent_vs_fla=independent_checks, unchanged=unchanged,
+                           input_sha256=before, output_sha256={n: _a2_hash(v) for n, v in got.items()},
+                           finite_stages={n: bool(v.cpu().isfinite().all()) for n, v in got.items()},
+                           launcher=args.a2_launcher, wall_including_allocation_copy_build_s=wall,
+                           execution=adapter._BRIDGE_TRACE.copy() if adapter else options.get("_execution_evidence"))
+                (directory / f"{case_id}.json").write_text(json.dumps(row, indent=2) + "\n")
+                print("A2_CASE_RESULT", json.dumps(row), flush=True)
+                results.append(row)
+                assert unchanged, "Unit modified an input"
+                assert all(v["ok"] and v["relative_l2"] <= 1e-5 for v in oracle_checks.values()), "CPU oracle disagreement"
+                assert all(v["ok"] and v["relative_l2"] <= 1e-5 for v in independent_checks.values()), "Independent transpose-state oracle disagreement"
+                if args.a2_suite != "range":
+                    assert all(v["ok"] for v in comparisons.values()), "A2 numeric acceptance failed"
+                if args.a2_suite == "performance":
+                    row["timing"] = _a2_measure_sandwich(unit, inputs, options, x)
+                    assert before == {n: _a2_hash(v) for n, v in inputs.items()}, "Timing mutated inputs"
+                    (directory / f"{case_id}.json").write_text(json.dumps(row, indent=2) + "\n")
+                    print("A2_TIMING", case_id, json.dumps(row["timing"]), flush=True)
+    (directory / "results.json").write_text(json.dumps(results, indent=2) + "\n")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", required=True,
-                    choices=("drift", "bitwise", "gqa", "bwd"))
+                    choices=("drift", "bitwise", "gqa", "bwd", "a2-unit"))
     ap.add_argument("--block-dim", type=int, default=4)
     ap.add_argument("--max-bd", type=int, default=4, help="bitwise 对比的上限 bd")
     ap.add_argument("--span", type=float, default=46.0,
@@ -350,7 +643,16 @@ def main() -> int:
     ap.add_argument("--cs", type=int, nargs="+", default=[1, 2, 4, 8, 16],
                     help="drift 扫的 C 列表。C=1 会被 C=1 多头闸拦下（那是预期的）")
     ap.add_argument("--_dump", help="内部：bitwise 子进程的落盘目录")
+    ap.add_argument("--a2-output", help="A2 private output/build directory; one directory per block_dim")
+    ap.add_argument("--a2-launcher", choices=("aclnn", "bridge"), default="aclnn")
+    ap.add_argument("--a2-suite", choices=("real", "defaults", "range", "performance"), default="real")
+    ap.add_argument("--a2-lengths", type=int, nargs="+", default=[4096, 128, 256, 512, 64])
+    ap.add_argument("--a2-seeds", type=int, nargs="+", default=[2026])
+    ap.add_argument("--a2-spans", type=float, nargs="+", default=[8.])
     args = ap.parse_args()
+
+    if args.check == "a2-unit":
+        return check_a2_unit(args)
 
     try:
         import torch_npu  # noqa: F401  —— 注册 "npu" 设备类型，不导入 .to("npu") 就报错
