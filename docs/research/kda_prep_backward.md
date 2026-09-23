@@ -517,3 +517,25 @@ The profiler archive is private. Public `performance-attribution-summary.json`
 contains only aggregate kernel measurements and per-kernel times; machine/device
 coordinates and raw tracing paths are omitted. `summarize_backward_profile.py`
 recomputes it from the archived CSV and clean measurement receipts.
+
+
+## BF-09 性能
+
+### 优化前冻结基线
+
+起点为 `967cf910a2fe5c0b1d3a42af42ab506711aea8f1`；本节的数字于本任务重新测量，生产 kernel 尚未改变。完整 Kimi B1/T4096/H=HV32、raw flags 全开、8 个梯度在 bd4 真机通过两份 Torch CPU FP32 golden。完整测试进程及后续性能进程都在首次 custom launch 前准备全部 50 个 vendor（含 9 个既有 backward）。同一卡顺序执行完整测试和性能，开跑时健康/空闲且持有两把共享协调锁，结束后仍健康。
+
+三轮同步 baseline/candidate/baseline，T1024/T4096 各使用旧 host 图及 Torch NPU 两种基线；共 36 条原始样本。下表为同步墙钟中位数，单位 ms。
+
+| T | 基线 | 基线 | 合入版 BF-08 | 倍数 |
+|---|---|---:|---:|---:|
+| 1024 | 旧 host 图 | 9.448393 | 107.326987 | 11.359285 |
+| 1024 | Torch NPU | 33.724555 | 107.373647 | 3.183842 |
+| 4096 | 旧 host 图 | 36.027179 | 427.648428 | 11.870161 |
+| 4096 | Torch NPU | 119.664340 | 427.921067 | 3.576012 |
+
+[原始回执](../../kernels/projects/a5/kda_prep/evidence/backward/bf09-baseline-v1/)保留完整数值、逐头逐 chunk 校验、环境、输入/输出/源码哈希、两份编译清单、host 算子审计、36 条时间样本和派发/事件归因。`verify_bf09_baseline.py` 可复算中位数并核验文件及起点源码身份。私有完整原始 JSON 归档 SHA-256 为 `4b7473aee21df886fab840af0cd50e8e7710f7983f487182c03f031c1e9554b7`，已在新目录逐文件恢复并核验哈希。NPU-free 基线测试 1180 passed / 5 skipped。
+
+这次记录仅冻结优化前 bd4 的完整训练与性能结果；BF-09 候选、其他 bd、完整网格及收尾验收尚未完成。此前批准的 D-PM-54/55/56 数值判读和未获 CPU 正确性资格的端点披露保持原样。
+
+编译日志保留了既有 D-084 数据搬运/UB bank 性能提示；运行日志另有 NPU 分配器对齐提示及 Torch NPU 基线使用基础存储格式的提示。它们没有被屏蔽，未出现同步/hazard/deadlock 告警。当前基线与后续候选均沿用同一环境；不修改写集外的既有 kernel。复算器负对照在更新文件哈希后仍拒绝篡改的时间中位数。
