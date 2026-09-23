@@ -555,4 +555,79 @@ recomputes it from the archived CSV and clean measurement receipts.
 
 T4096相对新冻结的合入版基线427.648428ms减少46.93%，仍未达到建议的旧host1.25倍目标。[开发阶段原始JSON](../../kernels/projects/a5/kda_prep/evidence/backward/bf09-candidate3-v1/)保留36条时间样本、编译、完整训练数值和源哈希。完整私有原始JSON归档SHA-256为`b2676197c0aec76184b6978e3de782290c1821af1125d7e5945e67a1a4f7feb9`，12份JSON已在新目录恢复并逐文件校验。
 
-当前生产版本的NPU-free测试1183 passed / 5 skipped，包含3种直接调用生产算术 helper 的功能模拟和零残差负对照。任务base入口文件未改变；前驱`6c42dc6`入口负对照保留11个预期失败和8个no-grad通过。最终四bd网格、端点、模型、benchmark审计、独立profile及最终归档仍在执行；这些开发结果不替代最终资格。
+当前生产版本的NPU-free测试1183 passed / 5 skipped，包含3种直接调用生产算术 helper 的功能模拟和零残差负对照。任务base入口文件未改变；前驱`6c42dc6`入口负对照保留11个预期失败和8个no-grad通过。这些是开发阶段记录，不替代下文最终四bd网格、端点、模型、benchmark审计、独立profile和归档资格。
+
+### 最终验收与性能（2026-09-23）
+
+最终运行环境为 Python3.12.14、Torch2.12.0+cu130、torch_npu2.12.0、CANN9.1.0-beta.1；library pin为`90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5`，kernels pin为`b3b3f9c16df7c4626ed3c081032a1be5a753d0b1`。生产算术源码冻结于`14d6a67`，backward SHA-256为`ba38f20063cbeab2ddd02cf74ec8c0be5c0462f361ccb506b06097cba7dbb56c`。所有编译和执行均在Docker内完成，用户允许健康设备共享；以下同步耗时不代表独占设备窗口。
+
+bd1/2/3/4分别在独立进程完成完整Kimi B1/T4096/H=HV32训练，raw BF16/参数FP32、flags全开。两份Torch CPU FP32 golden检查输出/状态、逐头逐chunk和既有六项端到端梯度预算；8个返回梯度都参与跨bd逐位比较。`dA_log`/`ddt_bias`继续采用既有端到端观测口径，relative L2分别为0.2084000741/0.1481402620，不能把它们描述为新增的端到端精度资格。独立前处理梯度仍按FP64的冻结预算检查。
+
+完整输出、状态、9缓存与8梯度共19项跨bd逐位相同。四份1620案例×9梯度选择网格完成58,320次公开训练调用，原始汇总哈希均为`25eed12a0b5f0d368b5b10127d4a84472b60c28232e2674c13769e655d06d5ca`；7,992条度量覆盖28组预算，最大的relative-L2/预算比为0.711990248，逐元素相对误差/预算比为0.414567067。没有放宽预算或删除案例。
+
+四bd均完成norm22、46个边界案例、5个原始反向案例、两种真实形状和155/105门控回归；norm22返回值及16份端点四列数据跨bd逐位相同。完整训练之后的12种sim/pipesim通过。显式prepare以及先推理再训练均在首次custom执行前准备全部50 vendors（含9个既有backward），完整训练返回值一致；默认路径也遵守该顺序。三种直接调用生产helper的真机算术探针，先编完53 vendors、再完整训练、最后逐位核验高低分量，全部通过。主机测试1183 passed/5 skipped；原有18个模块AST节点和33个assert保持原样。
+
+边界的数值结论仍为**失败**：每bd两个beta saturation案例保留raw exit1/`passed=false`，四列分类为482个native flush、30条原已披露且仍未获资格的观察，candidate-only NaN为0。D-PM-54/55/56仅允许相应披露，不能写成CPU正确性通过。完整执行和授权披露已完成，与这个数值失败状态分别记录。
+
+最终同一卡重测合入版BF-08和优化版；各自包含T1024/T4096、旧host与Torch NPU两种基线、三轮同步baseline/candidate/baseline，共各36个原始样本。下表是同步墙钟中位数（ms），并列的每个基线都是其各自三明治窗口的实际测量。
+
+| T | 比较对象 | BF-08窗口基线 | 合入版BF-08 | 最终窗口基线 | BF-09 | BF-09/基线 |
+|---|---|---:|---:|---:|---:|---:|
+| 1024 | 旧host图 | 9.699619 | 107.530612 | 9.797481 | 56.199078 | 5.736074 |
+| 1024 | Torch NPU | 44.200690 | 107.576792 | 28.610516 | 56.177476 | 1.963525 |
+| 4096 | 旧host图 | 37.838653 | 428.859174 | 37.687341 | 223.063633 | 5.918795 |
+| 4096 | Torch NPU | 143.366410 | 428.862800 | 142.725444 | 223.128760 | 1.563343 |
+
+T4096从428.859174ms降到223.063633ms，减少47.9867%，仍为旧host的5.9188倍，未达到建议的1.25倍目标。T1024 Torch NPU基线在两窗口分别为44.200690/28.610516ms；其全部样本保留，不删异常值、不把窗口差异归因于优化。
+
+独立Level1 profiler与同步墙钟分开运行。合入版/最终版各43个custom launch，旧host图34个。下面列出所有最终custom kernel的累计设备时间；event窗口可能含host空隙，host派发与设备执行可重叠，三列不可相加当成墙钟分解。
+
+| kernel | 次数 | 合入版设备ms | 最终设备ms | 最终独立event ms | 最终host派发ms |
+|---|---:|---:|---:|---:|---:|
+| `kda_prep_backward_gate_bf16_f32_f32_kernel` | 1 | 373.030305 | 164.428501 | 168.459366 | 0.115693 |
+| `kda_prep_backward_norm_bf16_kernel` | 2 | 17.750638 | 17.722584 | 17.754839 | 0.159209 |
+| `kda_layout_bf16_bf16_kernel` | 12 | 10.094283 | 10.096065 | 10.109084 | 0.406352 |
+| `kda_layout_f32_bf16_kernel` | 3 | 2.316221 | 2.319100 | 2.329833 | 1.612429 |
+| `inverse_epilogue_kernel` | 1 | 2.263512 | 2.269184 | 2.273845 | 0.238337 |
+| `scan_fused_kernel` | 1 | 1.995156 | 1.994701 | 1.998646 | 0.164026 |
+| `finalize_post_stable_kernel` | 1 | 1.909007 | 1.916962 | 1.914848 | 0.186380 |
+| `kda_prep_chunk_norm_bf16_bf16_kernel` | 2 | 1.654512 | 1.645659 | 1.644399 | 0.056785 |
+| `tril_inverse64_v2_strict_bf16_kernel` | 1 | 1.467653 | 1.464940 | 1.465118 | 0.031117 |
+| `kda_sub45_aqk_repaired_kernel` | 1 | 1.292147 | 1.294818 | 1.291230 | 0.049395 |
+| `kda_sub2_score_stable_kernel` | 1 | 1.285364 | 1.288448 | 1.288569 | 0.047722 |
+| `kda_layout_f32_f32_kernel` | 2 | 1.161306 | 1.159285 | 1.156339 | 0.061342 |
+| `kda_prep_chunk_gate_bf16_f32_f32_kernel` | 1 | 1.009174 | 1.004733 | 1.081927 | 0.072870 |
+| `finalize_pre_stable_kernel` | 1 | 1.001893 | 0.999916 | 1.002550 | 0.152369 |
+| `kda_layout_bf16_f32_kernel` | 3 | 0.923696 | 0.927805 | 0.923791 | 0.239479 |
+| `inverse_mm_bounded_kernel` | 1 | 0.723282 | 0.721596 | 0.720089 | 0.145188 |
+| `finalize_pair_kernel` | 1 | 0.656255 | 0.655427 | 0.655010 | 0.133820 |
+| `kda_sub3_wy_stable_kernel` | 1 | 0.616222 | 0.616243 | 0.617645 | 0.056114 |
+| `finalize_reduce_kernel` | 1 | 0.579077 | 0.577942 | 0.582777 | 0.086160 |
+| `inverse_dainv_kernel` | 1 | 0.341187 | 0.343845 | 0.342422 | 0.103055 |
+| `inverse_dakk_fused_kernel` | 1 | 0.338989 | 0.338854 | 0.338702 | 0.074903 |
+| `kda_prep_backward_beta_bf16_kernel` | 1 | 0.432622 | 0.303131 | 0.303483 | 0.099449 |
+| `kda_sub1_gate_stable_kernel` | 1 | 0.195947 | 0.186548 | 0.190422 | 0.036855 |
+| `kda_prep_backward_gate_reduce_f32_f32_kernel` | 1 | 0.120470 | 0.120300 | 0.118059 | 0.087561 |
+| `kda_prep_chunk_beta_bf16_kernel` | 1 | 0.010270 | 0.010327 | 0.010401 | 0.031697 |
+
+gate第一阶段从373.030305ms降到164.428501ms，最终vector活动比例0.996，占本次profile kernel耗时总和的75.27%。最终独立归因运行的whole-stream event为222.694138ms，host custom派发合计4.448307ms；这些不是clean墙钟的可加项。对于**该份profile且保留当前gate实现**，即使其它工作全部消失，必经gate仍需164.428501ms；按profile kernel累计时长计，消去其它kernel最多带来1.328638倍加速。这是有条件的实测下界，不是对无profile墙钟或所有可能算法的理论下界。当前gate的补偿多项式、8次补偿平方、高低分量物化和固定归约仍是主要成本；仅去掉host派发不能达到目标。
+
+实际未修改的`benchmarks/host_op_audit.py`在最终源码上运行rawflags_grad/nograd。推理路径0次forbidden，训练路径原始verdict为`violations`、24次forbidden：既有`_scan_states`20次、既有backward的`neg`1次，以及audited roots外触发反向的3次操作。新的raw前处理路径没有算术/转换/拷贝违规；D-PM-42存量逐条保留，不能宣称训练全路径合规。原始benchmark JSON保持原字节和原判定。不可变执行快照不带`.git`，原始`audited_commit=unknown`也保留；通过实际工具/被审计源码哈希及伴随的完整source manifest机械对应执行源码。
+
+一次共享存储耗尽中断了两个边界收集，原13/19案例和空/缺失退出回执保留；新目录各重跑全部46案例。另一轮bd4网格经历设备Alarm，588案例后仅停止本任务进程（raw143），换健康设备重跑完整训练和全部1620案例；原部分结果不计验收。没有复位设备或停止他人任务。D-084搬运/UB bank性能提示、NPU分配器padding提示和Torch NPU基础格式提示均保留；未发现未解决的同步告警。
+
+公开证据分为`bf09-final-native-v1`、`bf09-final-validation-v1`、`bf09-final-grid-v1`、`bf09-final-closeout-v1`。前者保留完整训练/模型；validation通过完整对象去重和仅launch signature差异恢复全部2,512原始JSON；grid保留全量返回哈希、7,992原始度量、123类审计表和6份完整最坏案例；closeout保留72条性能样本、两份profile汇总、准备顺序、算术探针和原始benchmark审计。所有公开文件小于5MB，完整原始JSON/CSV、执行日志和已执行源码保存在私有归档，SHA与新目录恢复结果见各包。tensor诊断文件保留于私有执行目录，不将JSON/CSV归档描述为tensor归档。
+
+最终资格报告机械检查全部已执行Python文件与交付树一致、冻结预算字节不变、只读入口无diff；`contract.json`仅更新两个资格说明字段，执行时原文件也随报告保留以供比较。后加的恢复/复算工具不属于NPU运行源码。现有主机测试与真机执行验证使用相同生产代码，恢复/复算工具另以实际归档检查。
+
+从仓库根目录复核公开数据（恢复目标目录必须不存在）：
+
+```bash
+BF09_UNIT=kernels/projects/a5/kda_prep
+BF09_EVIDENCE="$BF09_UNIT/evidence/backward"
+python "$BF09_UNIT/restore_backward_validation.py" "$BF09_EVIDENCE/bf09-final-validation-v1" --restore tmp/bf09-review-validation
+python "$BF09_UNIT/classify_backward_endpoints.py" tmp/bf09-review-validation/final-boundaries-r2-bd1 --output tmp/bf09-endpoints.json
+python "$BF09_UNIT/verify_backward_review.py" "$BF09_EVIDENCE/bf09-final-grid-v1"
+python "$BF09_UNIT/restore_backward_validation.py" "$BF09_EVIDENCE/bf09-final-closeout-v1" --restore tmp/bf09-review-closeout
+python "$BF09_UNIT/verify_bf09_closeout.py" "$BF09_EVIDENCE/bf09-final-closeout-v1" --restored tmp/bf09-review-closeout
+```

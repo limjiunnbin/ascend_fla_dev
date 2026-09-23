@@ -451,7 +451,7 @@
     },
     "helper_sha256": "808b3d2c778ea577489ef966db72f38375d5a4d609190a63a63704757ae4f880"
   },
-  "task_validation_complete": false,
+  "task_validation_complete": true,
   "full_training_all_four_bd_passed": true,
   "cross_bd_19_outputs_bitwise_equal": true,
   "cross_bd_outputs": {
@@ -1169,11 +1169,6 @@
     "preserved_no_grad_pass_count": 8,
     "passed": true
   },
-  "remaining": [
-    "full native grid all4bd and cross-bd checks",
-    "complete endpoint disclosure and four-column cross-bd comparison",
-    "actual benchmark host audit and preparation-order checks",
-    "final 36 performance samples and separate profiler",
-    "final archive/source/privacy checks and task qualification"
-  ]
+  "remaining": [],
+  "final_closeout": "../bf09-final-closeout-v1/summary.json"
 }

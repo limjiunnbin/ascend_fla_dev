@@ -1,4 +1,5 @@
 {
+  "original-receipts/manifest.json": "d5f6ce600f8fdacfcf25c2bc4a818fb0552f8a23958291e9ca6acc64b7b13ebc",
   "original-receipts/receipts-0000.jsonl": "58ab08349ef39d8bcde577af20237f916238e8172c6f1ee12de23664dd7db76d",
   "original-receipts/receipts-0001.jsonl": "c1a813eebd837fc8e57159e5add387ce888fb40b5385e7158975d7981dc61c6c",
   "original-receipts/receipts-0002.jsonl": "aa07b8d2ba313b9e72237c0db6c1c38da4e681507948fdb7babb54a14a288d03",
@@ -10,6 +11,5 @@
   "original-receipts/receipts-0008.jsonl": "88076253e1e1b858adac67830a0ce91d1d8fa5118bf7ba1cc22107dc86b32e67",
   "original-receipts/receipts-0009.jsonl": "8a6b4d61ebfc9fbc2bf3a150eedefe057465c3f644c0264504ef9661d665041f",
   "reconstruction.json": "ef635803d8ad85cf3f5d03caf20f1bc4e218bc333b514cfb6f04bfc1b91168d8",
-  "summary.json": "e45a7e66f36c75cdcbba60892c8dae8a82d2b389bdbaeb69e7d6a1b572e87c3c",
-  "original-receipts/manifest.json": "d5f6ce600f8fdacfcf25c2bc4a818fb0552f8a23958291e9ca6acc64b7b13ebc"
+  "summary.json": "e3fab8db50e405b64b8a6960900033814626ad47e8fb4ab8a61c4a15b927e56a"
 }

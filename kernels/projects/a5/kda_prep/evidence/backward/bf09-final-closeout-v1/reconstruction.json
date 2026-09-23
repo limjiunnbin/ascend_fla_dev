@@ -42,7 +42,7 @@
       "ascend910b",
       "ascend950"
     ],
-    "driver_sha256": "f883e2845b713d14e29372516963576d98f81676297c751bca692390234d061f",
+    "driver_sha256": "0e1fb3e2c25bc8d8248adbdd9e3a2f05edaf3912d2ad44db3b9a0160638bd089",
     "production_source_sha256": {
       "ascend_fla/__init__.py": "9a283230ee2f9fd2ec257512a6ea018e5eed471ba9c9e630c1dedd46b8b4581f",
       "ascend_fla/compat/__init__.py": "42e5c1ab504c3d4f53b0376be2ae91efb04eae7d88a65305abf1647a564f5d32",
@@ -451,916 +451,199 @@
     },
     "helper_sha256": "808b3d2c778ea577489ef966db72f38375d5a4d609190a63a63704757ae4f880"
   },
-  "task_validation_complete": true,
-  "original_private_archive": {
-    "archive_sha256": "6682ab719479249262b33bbbd6974061367f67dd4d11ffa41105991a0853d83f",
-    "archive_bytes": 9639301,
-    "fresh_restore_verified": true
+  "format": "bf09-cross-bd-json-v1",
+  "original_files": 63,
+  "original_sha256": {
+    "receipts/baseline-r2-full-bd4/compile.json": "24466dd2e8c4abf2e8b94acaf4aa42a435d190a8de775544cbcb20a72c055339",
+    "receipts/baseline-r2-full-bd4/environment.json": "95453efe4233ac2c4529078d4022a37aeb88ed34de71cc6af94e7d80e0118eed",
+    "receipts/baseline-r2-full-bd4/full.json": "ffb92d2f98af96a64f31fc57e62b62232345e1788c45daf8c9ad039632b859c7",
+    "receipts/baseline-r2-full-bd4/summary.json": "0f77e72be53f801dd57da789b3eaada935da444d159329609db0821cc7192456",
+    "receipts/baseline-r2-full-bd4/training-audit.json": "fa716a6229918984521d4a713be57504f0b6fe56e5748a24a2a5ea090a963648",
+    "receipts/baseline-r2-full-bd4/ulp-details/k/00000.json": "c363b33ac07164f8e3c74c0ad20e196a7aa7840f966006a6d1f4baf5563ce995",
+    "receipts/baseline-r2-full-bd4/ulp-details/q/00000.json": "71315f6a03f132930e730771030b7c9dcabfe4c1ddd347ffbd395124a616c954",
+    "receipts/baseline-r2-perf-bd4/compile.json": "ffcc5dcba0d3ac3421a002340ca377227518f049c684ea0c7963ceacedc585cb",
+    "receipts/baseline-r2-perf-bd4/environment.json": "7dc4406fbc0dfbbf4fdc2b60996ed9af1d49a91a58882eefbfa044835b2f5ee1",
+    "receipts/baseline-r2-perf-bd4/measurements.json": "01af8a27f875e217f33718e6b54bb2bbec32e36d255ada0669496dce38ad0cb4",
+    "receipts/baseline-r2-perf-bd4/raw-timings.json": "a2da8f8d2758d5284a1da78410a6a38465b4bfc39e37f1807d0189e86f994f2f",
+    "receipts/baseline-r2-perf-bd4/summary.json": "ed1850fd2ec902cb966aae83534c5570d65a4cec2a6d905354808a3e7168d409",
+    "receipts/baseline-r2-profile-bd4/profile-summary.json": "87073756103ed197e0db5667766639ccea7a060f9a76dc22b9330f8976a4f042",
+    "receipts/final-arithmetic-bd4/extra-compile.json": "a2e9e82efef7f4088f4b5bf44f274fda2efab0972d8c0c2c1d861e5b72396015",
+    "receipts/final-arithmetic-bd4/full/compile.json": "a45d37e9a670061dd286d605be99d8f50654668584beafb1b094c87a2253e5bb",
+    "receipts/final-arithmetic-bd4/full/environment.json": "5af1771602229707838098afa2f6c6f55b65d3fa3fb719643c576a159ac51ab9",
+    "receipts/final-arithmetic-bd4/full/full.json": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622",
+    "receipts/final-arithmetic-bd4/full/summary.json": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9",
+    "receipts/final-arithmetic-bd4/full/training-audit.json": "bbf296b178c7dba12b75f1fa3f4df8b15bc0f94f39d529558cc5e8793568c3f7",
+    "receipts/final-arithmetic-bd4/full/ulp-details/k/00000.json": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903",
+    "receipts/final-arithmetic-bd4/full/ulp-details/q/00000.json": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315",
+    "receipts/final-arithmetic-bd4/summary.json": "752e6bf10146da51da262ad356944740aefa0d64ec21edf9e7b31968ff074a8a",
+    "receipts/final-audit-bd1/context.json": "7fbea6043c2ae25bbe52e2bd82ecc84cde8af625b759477b7a18c5d626004126",
+    "receipts/final-audit-bd1/full/compile.json": "1aa10ac3e1f00115e7c2036b05f8795f0663ebf81a060df3b98ab600cd60c315",
+    "receipts/final-audit-bd1/full/environment.json": "7c63782228c261061edca6d3ef44d61e8974e41f827a7a83437023f5630a43b4",
+    "receipts/final-audit-bd1/full/full.json": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622",
+    "receipts/final-audit-bd1/full/summary.json": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9",
+    "receipts/final-audit-bd1/full/training-audit.json": "ddd8d6a08429660db0d551118d521a98e5efb7968e64c3d12a88e5e7ac733f39",
+    "receipts/final-audit-bd1/full/ulp-details/k/00000.json": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903",
+    "receipts/final-audit-bd1/full/ulp-details/q/00000.json": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315",
+    "receipts/final-full-r3-bd4/compile.json": "3b047d56dba7d3dfea2f67bc76843f0d5649c0c88ca9d9481de4c480eb7f8d48",
+    "receipts/final-full-r3-bd4/environment.json": "5af1771602229707838098afa2f6c6f55b65d3fa3fb719643c576a159ac51ab9",
+    "receipts/final-full-r3-bd4/full.json": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622",
+    "receipts/final-full-r3-bd4/summary.json": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9",
+    "receipts/final-full-r3-bd4/training-audit.json": "bbf296b178c7dba12b75f1fa3f4df8b15bc0f94f39d529558cc5e8793568c3f7",
+    "receipts/final-full-r3-bd4/ulp-details/k/00000.json": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903",
+    "receipts/final-full-r3-bd4/ulp-details/q/00000.json": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315",
+    "receipts/final-order-explicit-bd1/compile.json": "076e85c9dd5b23ee2ff8ad86d02f0289a06d877ed5e565631e0d37ab680dbdb8",
+    "receipts/final-order-explicit-bd1/environment.json": "7c63782228c261061edca6d3ef44d61e8974e41f827a7a83437023f5630a43b4",
+    "receipts/final-order-explicit-bd1/full.json": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622",
+    "receipts/final-order-explicit-bd1/preparation-order.json": "d71a1202341d2d44a0b83cc594662166ee8210ca8d194f53f3b33d0da9fe0aa4",
+    "receipts/final-order-explicit-bd1/summary.json": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9",
+    "receipts/final-order-explicit-bd1/training-audit.json": "ddd8d6a08429660db0d551118d521a98e5efb7968e64c3d12a88e5e7ac733f39",
+    "receipts/final-order-explicit-bd1/ulp-details/k/00000.json": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903",
+    "receipts/final-order-explicit-bd1/ulp-details/q/00000.json": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315",
+    "receipts/final-order-inference_then_training-bd1/compile.json": "8f131abe2158ef6d9c6c3465f18d40173e47b3a0268124264e2a5b0d0e2653c2",
+    "receipts/final-order-inference_then_training-bd1/environment.json": "58dd001be7999384fc5368d175ab6593e40ee39875b9e9d88ec44061f754cb54",
+    "receipts/final-order-inference_then_training-bd1/full.json": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622",
+    "receipts/final-order-inference_then_training-bd1/preparation-order.json": "c0b4270e10b8a1a0a938c8660e2b53c9a4df38f73c4eb3798110be12a1299dc0",
+    "receipts/final-order-inference_then_training-bd1/summary.json": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9",
+    "receipts/final-order-inference_then_training-bd1/training-audit.json": "e2d5cbd4f3cdbfd493da7a3a53f2aa49d5c1f9048a3c8a497acd55257622d03f",
+    "receipts/final-order-inference_then_training-bd1/ulp-details/k/00000.json": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903",
+    "receipts/final-order-inference_then_training-bd1/ulp-details/q/00000.json": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315",
+    "receipts/final-perf-bd4/compile.json": "cb0ffd84a12a3f09eab151c7536e431fe9babb40238b6318ceac94652f52e596",
+    "receipts/final-perf-bd4/environment.json": "7aaa7f057573811697fbd789da1eb9cbfe85aeaac0bdcf63f61ea5f41a0e02a0",
+    "receipts/final-perf-bd4/measurements.json": "cc469a30da125c8a75da45077fa3a4a6b831e130ca166cf4dd9af1ae31b29f76",
+    "receipts/final-perf-bd4/raw-timings.json": "4cd21720f97f25931a1404faafbaf2175aef36bf7cbc05f002c3e618f273e21a",
+    "receipts/final-perf-bd4/summary.json": "9bd1c484a0f3878ae7f67a63c09ea0a7d7f6aa313ca0cfed58ac1a71a9ba11de",
+    "receipts/final-profile-bd4/compile.json": "79016df014a77ed6b17e502cc93f0505922e802756e2bd28f5864e69f9698545",
+    "receipts/final-profile-bd4/environment.json": "7aaa7f057573811697fbd789da1eb9cbfe85aeaac0bdcf63f61ea5f41a0e02a0",
+    "receipts/final-profile-bd4/profile-summary.json": "b473c1762bb4e41095fa4634a0c197f84a2ebc1aa0142a9752c1cd67b16c6489",
+    "review/baseline-r2-profile-aggregate.json": "66579ccaa4877184c59ec993c1328344019d8251b8553806abd6a5a132d96b65",
+    "review/final-profile-aggregate.json": "72433ea97e5ce1997c34ca2ed0233c9e3381b5d5c0153d89613c5b6aa633872c"
   },
-  "public_restore": {
-    "passed": true,
-    "original_files": 2512,
-    "packed_files": 688,
-    "reconstructed_files": 1824,
-    "all_original_bytes_verified": true
-  },
-  "packed_archive": {
-    "passed": true,
-    "files": 688,
-    "original_bytes": 34354411,
-    "shards": 10,
-    "restored": false
-  },
-  "cross_bd": {
-    "four_columns_all4bd_bitwise_equal": true,
-    "norm22_all4bd_actual_hashes_equal": true,
-    "numerical_cpu_endpoint_pass": false,
-    "four_column_sha256": {
-      "beta_bf16_saturation.json": "a7d87d124666c9534ed17510f904082660736bce3574320b30944eba2d4f78b8",
-      "beta_f32_saturation.json": "213722055169ff9dac14ee9fba0bb38eda88d434dab23aaa15e6c824871b4d62",
-      "gate_bf16_alog-100.json": "d9d02f8e6b465af1052233ebbc33c3d1cf9bf737a87034efcfb181317391f21b",
-      "gate_bf16_alog-104.json": "01fe2683c1bf9e105c46bd6396463c7ed7cdd6155f1bca326402fb74a22261c1",
-      "gate_bf16_alog-120.json": "e8de94e8fe2b08ae30449448f1b3a64c8539c0838ea32c1b981b2126d09a7fc8",
-      "gate_bf16_alog100.json": "1f3d72fda585361ee91e9d9d146272c52dc5d63c674d1b322d61304608ec515d",
-      "gate_bf16_alog80.json": "bc41ec1cb904e273e5ee3eae1795ff3f76dad68e7d98c2170eee86131fc81d55",
-      "gate_bf16_alog88.json": "695d48f7590f04c3cc7fc6f690c80a904fdeb5307673b73cb582a78495a9288c",
-      "gate_bf16_alog89.json": "e291c7e011c3fe9d2a950a60dded67736cd8653bff7c384a55fdae7fac8ff322",
-      "gate_f32_alog-100.json": "627f1557312ea4a86edb3c3975aee58f5c1783d61abd7606492d70c09d2101bf",
-      "gate_f32_alog-104.json": "e4434cdfe6f29bb29a4dec9afb716f237909cdc820cd5f686174d69cd1ae2d70",
-      "gate_f32_alog-120.json": "316940cfe7a63c36cc946089b390f3a8bb3f2817c3ec12d3e298dcb5a9ef46f4",
-      "gate_f32_alog100.json": "d68d20449d38bee81c97c7aee95fa19af0af366f63d7e66d24423c2d561710c5",
-      "gate_f32_alog80.json": "b116ef073649be8140cee651b910b231d6fe858cdd3466244681bbede52d22e7",
-      "gate_f32_alog88.json": "d2fc21e05b47aec0ec1c0e23bdbca5d040d83ad0382afe1a5528470926233fea",
-      "gate_f32_alog89.json": "f91d2e3a3646c88d9bc3b96f923efc88088e5d02589a71c4aba5d680b5afcf13"
-    },
-    "norm22_actual_sha256": {
-      "bf16_near_null_parallel_sensitivity": "d475fd50bc1b40ca74e13cfa2b958e8102f68204731d7cc8536f78bc2fd2db95",
-      "f32_near_null_parallel_sensitivity": "ff320243f7b0f8eddbc5552ba5ac486aa5d9f36039090588754de1aefc6dfe90",
-      "bf16_gaussian": "1cf307013be5d1c6ebcc3f30491f981ef2c99d4e10fc41d14365d136a6d6dcca",
-      "bf16_full_kimi": "315b3fdbe4c46960d20015ee7c439045880a2ba2ab5dc0a7ca2288cd24b71840",
-      "bf16_scale_0.0": "93443a8d2eeecaa40697e72bb67ea9797d0db7fc8154f127f6d26fc559037820",
-      "bf16_scale_1e-20": "68265604c1835115f49068b6fe8b64042b2623f5cd47977648f5f79e75de4ac3",
-      "bf16_scale_1e-08": "e6ef5f982cd573277464a259451764b3168ed3e3c2450dfeb1741f42b15bbabf",
-      "bf16_scale_0.0001": "a9e9d29a15c5818bdf42461301ddf626dbeee351330155dad64ea2654dabfe27",
-      "bf16_scale_30.0": "f3daf7b54993d38cd9ab84cef7dc2298ec90c051b80fcce31b8e5ad82a8e98bc",
-      "bf16_scale_10000000000.0": "1956c9abbf8258928d09fc0d5a4416bf59e4791d907fe70a70b5ccb8af9e04e6",
-      "bf16_scale_1e+18": "fd36eed61658f6328bc13f0c5bc5b64cd0f4efc904fb8a32020be645e21ee92f",
-      "bf16_scale_1e+20": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
-      "f32_gaussian": "5513f9ccbf8691e4a7832066e3fc174942ce29caeeb591909435098a4dc23106",
-      "f32_full_kimi": "b56658c9666cc64956aa9cfaeafb781755bff39cc51da96f71283b134cbd71b7",
-      "f32_scale_0.0": "6a73f0b9b033ad8f38ec6690a22a508368e52bca6b6d6d4556ce47d03fa205ee",
-      "f32_scale_1e-20": "3c84687705147dd3bdb5ea5a40fb61fd6b28c900d9aba33a712ceda1d72db6ed",
-      "f32_scale_1e-08": "ed61740ae1455f6cf5193c45e3ed7e11612e12fb77ae107bfc87ba79ba7dccef",
-      "f32_scale_0.0001": "548a83b1021c265f746c78d531acbdca1cc190c20b1f601c75b89e7ce40c6201",
-      "f32_scale_30.0": "4050a970e052abcc895e871fb091bfd11d4b939c7adec3173830616f4e96a168",
-      "f32_scale_10000000000.0": "d5300b87c3afeb6695829a2eb761e5d0c00f81b293e0f53a9f75b634f308823d",
-      "f32_scale_1e+18": "1b0aad876aa5ca225f4b0c6920d38ce3cff676919e4aae96bef386c836337840",
-      "f32_scale_1e+20": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31"
-    },
-    "disclosures": [
-      {
-        "block_dim": 1,
-        "native_flush": 482,
-        "unqualified": 30,
-        "candidate_only_nan": 0
-      },
-      {
-        "block_dim": 2,
-        "native_flush": 482,
-        "unqualified": 30,
-        "candidate_only_nan": 0
-      },
-      {
-        "block_dim": 3,
-        "native_flush": 482,
-        "unqualified": 30,
-        "candidate_only_nan": 0
-      },
-      {
-        "block_dim": 4,
-        "native_flush": 482,
-        "unqualified": 30,
-        "candidate_only_nan": 0
-      }
-    ]
-  },
-  "norm_and_boundary_case_difference_scope": "Only compiled launch signatures differ; all other fields and numeric values are byte-reconstructable from bd1.",
-  "case_equivalence": [
-    {
-      "path": "final-boundaries-bd3/cases/beta_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_bf16_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_bf16_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_f32_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/beta_f32_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_bf16_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd3/cases/gate_f32_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_bf16_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_bf16_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_f32_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/beta_f32_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_bf16_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-bd4/cases/gate_f32_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_bf16_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_bf16_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_bf16_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_f32_saturation.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_saturation.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/beta_f32_zero.json",
-      "base": "final-boundaries-r2-bd1/cases/beta_f32_zero.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_bf16_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_bf16_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_bf16_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_bf16_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_bf16_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_bf16_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_bf16_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_bf16_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_f32_full_kimi.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_f32_gaussian.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-boundaries-r2-bd2/cases/gate_f32_f32_f32_threshold.json",
-      "base": "final-boundaries-r2-bd1/cases/gate_f32_f32_f32_threshold.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_full_kimi.json",
-      "base": "final-norm-bd1/cases/bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_gaussian.json",
-      "base": "final-norm-bd1/cases/bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/bf16_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_0.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0001.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+18.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-08.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/bf16_scale_30.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_30.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_full_kimi.json",
-      "base": "final-norm-bd1/cases/f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_gaussian.json",
-      "base": "final-norm-bd1/cases/f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/f32_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_0.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0001.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+18.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-08.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd2/cases/f32_scale_30.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_30.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_full_kimi.json",
-      "base": "final-norm-bd1/cases/bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_gaussian.json",
-      "base": "final-norm-bd1/cases/bf16_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/bf16_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_0.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0001.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+18.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-08.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/bf16_scale_30.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_30.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_full_kimi.json",
-      "base": "final-norm-bd1/cases/f32_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_gaussian.json",
-      "base": "final-norm-bd1/cases/f32_gaussian.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/f32_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_0.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0001.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+18.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-08.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-20.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd3/cases/f32_scale_30.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_30.0.json",
-      "numerics_and_environment_identical": true
-    },
-    {
-      "path": "final-norm-bd4/cases/bf16_full_kimi.json",
-      "base": "final-norm-bd1/cases/bf16_full_kimi.json",
-      "numerics_and_environment_identical": true
-    },
+  "reconstructions": [
     {
-      "path": "final-norm-bd4/cases/bf16_gaussian.json",
-      "base": "final-norm-bd1/cases/bf16_gaussian.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-audit-bd1/full/full.json",
+      "base": "receipts/final-arithmetic-bd4/full/full.json",
+      "bytes": 1115617,
+      "sha256": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/bf16_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-audit-bd1/full/summary.json",
+      "base": "receipts/final-arithmetic-bd4/full/summary.json",
+      "bytes": 53405,
+      "sha256": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_0.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-audit-bd1/full/ulp-details/k/00000.json",
+      "base": "receipts/final-arithmetic-bd4/full/ulp-details/k/00000.json",
+      "bytes": 150974,
+      "sha256": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/bf16_scale_0.0001.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-audit-bd1/full/ulp-details/q/00000.json",
+      "base": "receipts/final-arithmetic-bd4/full/ulp-details/q/00000.json",
+      "bytes": 122813,
+      "sha256": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/environment.json",
+      "base": "receipts/final-arithmetic-bd4/full/environment.json",
+      "bytes": 53070,
+      "sha256": "5af1771602229707838098afa2f6c6f55b65d3fa3fb719643c576a159ac51ab9"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+18.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/full.json",
+      "base": "receipts/final-audit-bd1/full/full.json",
+      "bytes": 1115617,
+      "sha256": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e+20.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/summary.json",
+      "base": "receipts/final-audit-bd1/full/summary.json",
+      "bytes": 53405,
+      "sha256": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-08.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/training-audit.json",
+      "base": "receipts/final-arithmetic-bd4/full/training-audit.json",
+      "bytes": 76804,
+      "sha256": "bbf296b178c7dba12b75f1fa3f4df8b15bc0f94f39d529558cc5e8793568c3f7"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/bf16_scale_1e-20.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/ulp-details/k/00000.json",
+      "base": "receipts/final-audit-bd1/full/ulp-details/k/00000.json",
+      "bytes": 150974,
+      "sha256": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903"
     },
     {
-      "path": "final-norm-bd4/cases/bf16_scale_30.0.json",
-      "base": "final-norm-bd1/cases/bf16_scale_30.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-full-r3-bd4/ulp-details/q/00000.json",
+      "base": "receipts/final-audit-bd1/full/ulp-details/q/00000.json",
+      "bytes": 122813,
+      "sha256": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315"
     },
     {
-      "path": "final-norm-bd4/cases/f32_full_kimi.json",
-      "base": "final-norm-bd1/cases/f32_full_kimi.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/environment.json",
+      "base": "receipts/final-audit-bd1/full/environment.json",
+      "bytes": 53070,
+      "sha256": "7c63782228c261061edca6d3ef44d61e8974e41f827a7a83437023f5630a43b4"
     },
     {
-      "path": "final-norm-bd4/cases/f32_gaussian.json",
-      "base": "final-norm-bd1/cases/f32_gaussian.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/full.json",
+      "base": "receipts/final-full-r3-bd4/full.json",
+      "bytes": 1115617,
+      "sha256": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622"
     },
     {
-      "path": "final-norm-bd4/cases/f32_near_null_parallel_sensitivity.json",
-      "base": "final-norm-bd1/cases/f32_near_null_parallel_sensitivity.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/summary.json",
+      "base": "receipts/final-full-r3-bd4/summary.json",
+      "bytes": 53405,
+      "sha256": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_0.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/training-audit.json",
+      "base": "receipts/final-audit-bd1/full/training-audit.json",
+      "bytes": 76804,
+      "sha256": "ddd8d6a08429660db0d551118d521a98e5efb7968e64c3d12a88e5e7ac733f39"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_0.0001.json",
-      "base": "final-norm-bd1/cases/f32_scale_0.0001.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/ulp-details/k/00000.json",
+      "base": "receipts/final-full-r3-bd4/ulp-details/k/00000.json",
+      "bytes": 150974,
+      "sha256": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_10000000000.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_10000000000.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-explicit-bd1/ulp-details/q/00000.json",
+      "base": "receipts/final-full-r3-bd4/ulp-details/q/00000.json",
+      "bytes": 122813,
+      "sha256": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_1e+18.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+18.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-inference_then_training-bd1/full.json",
+      "base": "receipts/final-order-explicit-bd1/full.json",
+      "bytes": 1115617,
+      "sha256": "b470d8a517bad89faaa21838f85b107912e6b859766cf1e22353b4fd78624622"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_1e+20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e+20.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-inference_then_training-bd1/summary.json",
+      "base": "receipts/final-order-explicit-bd1/summary.json",
+      "bytes": 53405,
+      "sha256": "259306f4597c8b048387d25b7edade47402856449cebd7f5bb26f8663bbaa3f9"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_1e-08.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-08.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-inference_then_training-bd1/ulp-details/k/00000.json",
+      "base": "receipts/final-order-explicit-bd1/ulp-details/k/00000.json",
+      "bytes": 150974,
+      "sha256": "72dbf6665dc1aa5803f529a42e7a2e94c66ac4fa1dcb16136242d401bb8e3903"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_1e-20.json",
-      "base": "final-norm-bd1/cases/f32_scale_1e-20.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-order-inference_then_training-bd1/ulp-details/q/00000.json",
+      "base": "receipts/final-order-explicit-bd1/ulp-details/q/00000.json",
+      "bytes": 122813,
+      "sha256": "7cac8ff7b7c7879dec8855e91a4e02ee0ba84e21b032cb49ab798496835c4315"
     },
     {
-      "path": "final-norm-bd4/cases/f32_scale_30.0.json",
-      "base": "final-norm-bd1/cases/f32_scale_30.0.json",
-      "numerics_and_environment_identical": true
+      "path": "receipts/final-profile-bd4/environment.json",
+      "base": "receipts/final-perf-bd4/environment.json",
+      "bytes": 53076,
+      "sha256": "7aaa7f057573811697fbd789da1eb9cbfe85aeaac0bdcf63f61ea5f41a0e02a0"
     }
-  ],
-  "all_four_bd_original_regressions_passed": true,
-  "endpoint_cpu_numerical_pass": false,
-  "ordinary_criteria_and_authorized_disclosures_complete": true,
-  "remaining": [],
-  "restore_script_sha256": "18dbdbc2a19bb04b5a1f653ce634fdf2b58f79f51117a3d2c9338c4f53cf716f",
-  "final_closeout": "../bf09-final-closeout-v1/summary.json"
+  ]
 }
