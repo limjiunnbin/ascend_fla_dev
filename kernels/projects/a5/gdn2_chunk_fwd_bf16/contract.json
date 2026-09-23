@@ -120,7 +120,12 @@
    "q_k_v_o": "bfloat16",
    "g_erase_gate_w_state": "float32"
   },
-  "batch_note": "B=1 exactly, the same domain as a5.gdn2_chunk_fwd: the BF16 path neither widens nor narrows it, and the public entry raises on B>=2 naming the constraint."
+  "batch_note": "B=1 exactly, the same domain as a5.gdn2_chunk_fwd: the BF16 path neither widens nor narrows it, and the public entry raises on B>=2 naming the constraint.",
+  "gate_span": {
+   "measured_to": 2541.7,
+   "status": "upper limit not established",
+   "note": "Measured at gate_scale 3..64 on one A5 host: finite and within budget throughout, with no degradation trend. No failure point was reached, so no gate is declared. GD2-01's 1520.9 is an FP32 observation and is not inherited."
+  }
  },
  "dependencies": {
   "python": ">=3.10",
@@ -324,29 +329,29 @@
    "device": "a5",
    "backend": "cce",
    "stage": "reference",
-   "status": "untested",
-   "note": "BF-05 in progress; filled from the recorded runs before delivery."
+   "status": "passed",
+   "scope": "All 12 contract cases on CPU."
   },
   {
    "device": "a5",
    "backend": "cce",
    "stage": "sim",
-   "status": "untested",
-   "note": "BF-05 in progress; filled from the recorded runs before delivery."
+   "status": "passed",
+   "scope": "All 12 contract cases; the BF16 path needs a raised --timeout because A5 has no tile-level cast and each conversion is a per-token vf call."
   },
   {
    "device": "a5",
    "backend": "cce",
    "stage": "compile",
-   "status": "untested",
-   "note": "BF-05 in progress; filled from the recorded runs before delivery."
+   "status": "passed",
+   "scope": "All five kernels pass the physical address allocation and build for ascend950."
   },
   {
    "device": "a5",
    "backend": "cce",
    "stage": "board",
-   "status": "untested",
-   "note": "BF-05 in progress; filled from the recorded runs before delivery."
+   "status": "passed",
+   "scope": "All 12 contract cases on an Ascend950PR (CANN 9.2.0, op packages including ascend950). block_dim 1/2/4/8 bitwise equal on three shapes; the FP32 path bitwise unchanged after its host conversions were removed; the host operator audit clean on both dtype paths. Gate span measured to 2541.7, still finite and in budget, on the second A5 host whose compiler build differs; the upper limit is NOT established. See evidence/ and README.md."
   }
  ],
  "measured": {
