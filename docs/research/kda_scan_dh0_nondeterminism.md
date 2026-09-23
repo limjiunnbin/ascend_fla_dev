@@ -9,7 +9,7 @@ BHV 可以用上一组槽 1 归还的信用覆盖槽 0，而上一组最终 stat
 两张 CANN 9.1 健康卡和一张 CANN 9.2 健康卡的共同恒等 VF 时序干预
 均支持这一因果解释。原始入口的 50 次新重放没有自然复现不确定性；CANN 9.2
 的无扰动注释副本仅首次 anchor 出错。不能据此声称问题消失或已经修复。
-完整私有归档的恢复核验仍在收尾。
+完整私有归档已恢复并逐文件校验；实际张量与回执的对应核验也已完成。
 本任务只定位：所有实验都在 `kda_scan_diag`，上游、生产 kernel 和公开调度未改。
 
 ## 来源与范围
@@ -216,3 +216,11 @@ BHV0/2/4/6；同一个无拟合 seed 替换预测各解释 65,491 个，余下�
 首次主机全测因未改动基线的 README/PM 看板不同步出现一次失败；保留失败证据，
 快进 PM 的元数据修复后通过，真机源码未变。编译中既有 D-084 性能警告未被隐藏，
 本任务没有性能结论或相关优化；seed WAR 是调查对象，不能作为生产通过项。
+
+归档收尾：[archive-restoration.json](../../kernels/projects/a5/kda_scan_diag/evidence/closeout/archive-restoration.json)
+记录三份私有归档的哈希及 6,923 个文件的恢复核验。原环境归档已传回并恢复；
+跨环境归档在分配的 Docker 内恢复到新目录逐文件核验，另行异地备份仍在传输，
+不宣称该附加备份完成。模型、trace、生成源码、旧版实际运行脚本及失败记录另行归档。
+[capture-correspondence.json](../../kernels/projects/a5/kda_scan_diag/evidence/closeout/capture-correspondence.json)
+核对恢复后的 264 份 anchor、1,350 份偏差/错误 trial 与全部四输出哈希、
+差异元素计数及逐行形态；包含稳定重复的错误，未仅检查文件存在。

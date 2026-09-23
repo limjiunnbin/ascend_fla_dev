@@ -8,7 +8,7 @@
     "emission": "All seven native vector headers match model-side emitted sources; normalized negative-control CCE equals baseline",
     "vendor_compile": "50 production including 9 backward; 3 experiments where used, before first custom launch",
     "device_execution": "18 recorded full-first jobs complete across two CANN environments",
-    "private_archive": "generated; transfer/restoration in progress"
+    "private_archive": "6923 files restored and SHA/size verified; 264 anchors and1350 captured trials verified against numeric/hash receipts"
   },
   "recorded_native_jobs": 18,
   "original_replay_trials": 150,
@@ -46,5 +46,7 @@
     "host-pytest-current-base.log": "50397a9758cd58de46b30b10aba2d3798c747e9225375598e499ea54f1e81d06",
     "host-targeted-closeout.log": "6a840c9afb8c0e0e613d2f47dddba1dbba0efc79f3d678114250febb27d74362"
   },
-  "raw_receipt_sha256": "4bae6e1e9509054b1599fe9a9d93a50ce83415c4291a201d6228e728db03145a"
+  "diagnostic_validation_complete": true,
+  "review_status": "awaiting PM",
+  "raw_receipt_sha256": "a4b4a1377de4858bde963feec9698a7892576f83e12b991dfca6cfbc6f91918f"
 }

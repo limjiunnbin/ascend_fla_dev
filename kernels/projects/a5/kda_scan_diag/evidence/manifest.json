@@ -1,6 +1,6 @@
 {
   "schema": "a5k03.evidence-index/1",
-  "complete_task": false,
+  "complete_task": true,
   "files": {
     "models/model-baseline-b1h2c3bd1/summary.json": {
       "sha256": "c20f759a99100636394bd3f07a57d84324bddf2c879563cbf7304da1961e7b62",
@@ -2111,8 +2111,8 @@
       "bytes": 4537
     },
     "closeout/validation-summary.json": {
-      "sha256": "bfdbd0c78708eec28cb55a69e29d65b50a5276405b6f195281a2d8b8ed707dcb",
-      "bytes": 2782
+      "sha256": "a2966f4094c980704654313d5c2d63f5dc699ec85334061e47e2cae0f86cc232",
+      "bytes": 2932
     },
     "closeout/source-delivery.json": {
       "sha256": "31e76794fd236b3e4944d63df155bfae3aad1982dc8ff23e6f953c1876267140",
@@ -2121,6 +2121,14 @@
     "closeout/host-checks.json": {
       "sha256": "b37953c66836000a2f19f98bd8545ee81457a0203bc3b5a7dce39549b4666f23",
       "bytes": 4720
+    },
+    "closeout/archive-restoration.json": {
+      "sha256": "8e345bd8c328027f6376e4d68e038a150b0d5cb27c3e99b77ffc28d0276b38e7",
+      "bytes": 3502
+    },
+    "closeout/capture-correspondence.json": {
+      "sha256": "36532ee4192b8061194ce36e7e9edbb31620912587aaa59d8a19919e59cc41c2",
+      "bytes": 6678
     }
   },
   "scope": "Completed stages only; model/historical/native categories remain distinct. No production repair claim."
