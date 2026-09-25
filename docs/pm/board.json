@@ -4975,7 +4975,7 @@
       "wave": "W0",
       "soc": "a5",
       "priority": "P1",
-      "status": "assigned",
+      "status": "open",
       "model": [],
       "kernel": [
         "pgdn_chunk_bwd"
@@ -5002,19 +5002,8 @@
       "spec": "docs/pm/tasks/PK-05.md",
       "issue": 93,
       "pr": null,
-      "assignee": "limjiunnbin",
-      "assignee_caps": {
-        "agent": "自述为与 A2-09 同一 agent（APPLY 里写「我手上的 A2-09」，session 值不同）",
-        "socs": [
-          "a5"
-        ],
-        "soc_details": "自述（ACK 15:44Z）：A5 真机，在任务容器内执行；CANN 9.2.0（只读共享安装）、opp 含 ascend950（与 ascend910b、ascend910_93 并存，torch_npu 计算算子可用）、compiler timestamp 2026-05-09T12:45:09+08:00（clang 15.0.5，bisheng 与 ccec 同一份）、Python 3.12.14、torch 2.12.0+cu130、torch_npu 2.12.0、设备 Ascend950PR；与 BF-03 / BF-07 的机器环境不同。机器与卡归 assignee 管理（D-PM-28），结论只对其实际验证的这一套成立",
-        "ascriptor": "library 90cfcdc720bb…、kernels b3b3f9c16df7…（自述，取自 compatibility.json）",
-        "fla": "864a87f6ce5b…（v0.5.2-123-g864a87f6，自述）——与 GD2-01 / PK-02 / PK-03 的 pin e52dbc0e 不同，已要求对齐（见 reports）",
-        "fork": "limjiunnbin/ascend_fla_dev",
-        "session": "gdn-series-20260919T115559Z-29cb31d7",
-        "note": "按既定顺序（PM 2026-09-20T05:03Z 于 #93 回复「PK-05 在 BF-02→BF-03→BF-05 之后再派」）派单，三者均已 done，不需要重新 APPLY。近零真导数的四点裁定见 PK-05.md「PM 裁定」一节。"
-      },
+      "assignee": null,
+      "assignee_caps": {},
       "branch": "task/PK-05",
       "timebox_h": 24,
       "reports": [
@@ -5057,6 +5046,10 @@
         {
           "at": "2026-09-23T13:12",
           "summary": "ASSIGN（PM，按 2026-09-20T05:03Z 于 #93 的既定排序，BF-02→BF-03→BF-05 均已 done，直接派给排队 session，不需重新 APPLY）：规格 docs/pm/tasks/PK-05.md 已补全（近零真导数判据、A↔B 校准、do/dht/dA_T 三路组合、BF16 显式拒绝口径全部写清）。写集：kernels/projects/a5/pgdn_chunk_bwd/**、ascend_fla/ops/pgdn_chunk_bwd.py、tests/test_pgdn_chunk_bwd.py、docs/research/pgdn_chunk_bwd_gate_range.md。提醒：内部 kernel 形参名避开 `do`（C++ 保留字，GDA-03 已踩过）；预研事实（最大相对 L2 1.0479961e-6 等）未经 PM 核实，交付物仍须自己重做。"
+        },
+        {
+          "at": "2026-09-25T09:12",
+          "summary": "24h 未 ACK（ASSIGN 2026-09-23T13:12:32Z，issue #93 的 ASSIGN 评论）。核对了 #93 从 ASSIGN 时刻起的全部评论——只有 PM 自己发的那一条 ASSIGN，没有任何 ACK（也没有其它任何协议消息）。按 PROTOCOL §3.3「24 小时没有 ACK，任务退回 open」收回，回 open，分支 task/PK-05 保留。清空 assignee / assignee_caps；PK-05.md 里的「PM 裁定」一节（近零真导数分类方法论）继续有效，不因收回而重新讨论——下一个申领人直接按既有裁定接。"
         }
       ],
       "result": null,
