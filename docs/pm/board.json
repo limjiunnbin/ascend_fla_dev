@@ -3877,6 +3877,10 @@
         {
           "at": "2026-09-23T13:29",
           "summary": "ACK（13:24Z，自述，session gd202-a5-realdevice-1，头 e494f8d）：opp 普查完成，两台 A5 都有 ascend950（意味着 torch_npu 计算算子可用，不需要 AGENTS.md §5 的 D2H 绕行）；两台编译器 build 仍不同、分开记；主用机器 B（争用小），A 作为需要时第二来源。计划：GD2-01 契约全集 → bd 逐位比对 → 95B 端到端（FP32 预算 1e-3、BF16 预算 1e-2）→ 性能三明治（吸取 BF-05 算子名教训）→ 证据出包。BF-05 两条负结果已确认不冲突，会标清路径。"
+        },
+        {
+          "at": "2026-09-25T13:35",
+          "summary": "48h 无 STATUS，按 PROTOCOL §5 发 PING（issue #63）。核对了 #63 自 ACK（2026-09-23T13:24:41Z）起的全部评论，只有 ACK 这一条，之后 48h10m 没有任何 STATUS/RISK/BLOCKED。再等 24h 无回应按 §5 收回、回 open、分支保留。"
         }
       ],
       "result": null
