@@ -3127,6 +3127,10 @@
         {
           "at": "2026-09-24T11:12",
           "summary": "ACK（11:12:32Z，MikejR2904，issue #44）：读了 AGENTS.md / docs/handoff.md / docs/pm/PROTOCOL.md / docs/pm/START.md / docs/pm/tasks/A2-K1.md / docs/research/a2_gdn_abi.md。计划分五步：①按 AGENTS.md 铁律二新建 kernels/projects/a2/gdn_chunk_{fwd,bwd}（算子名加后缀区分、避开 C++ 关键字形参名），接 ascend_fla ops；②按 a2_gdn_abi.md §1.1-1.5,1.7 逐项补 ABI（GQA/GVA 用 GDA-02 的 i_h=i_hv//(HV//H) 模板、token-major 走真实 materialize 而非跨步 view、FP32 非零 initial_state、反向 dh0+接受 dht、FP32 final_state 并报 bf16 对照差值、scale 在 q 侧吸收、T%64!=0 显式拒绝）；③fwd inverse / bwd finalize / bwd wu 三处每个 L0C 累加 MMAD 前加 barrier(Pipe.M)（不分 dtype），保留 pin 的 FP32 split-K 规则，M<64 的 bf16/fp16 splitk 按 §7 拒绝；④910B3 真机双 oracle（fla naive + 仓内 CPU 参考）覆盖 o/final_state/7 个梯度，含 HV≠H（H=2,HV=4）非对称与分段 chaining，新增 tests/test_a2_gdn_chunk.py，tests/test_a2_accumulate_barriers.py 保持全绿并带删 barrier 负对照；⑤a2_gdn_abi.md 追加实现结果一节，BF16 路径跑 host 算子审计（无 host 侧核心计算）。明确排除 Batch B（门控跨度标定）与 Batch C（decode/GDA-04）。ETA 36h。PM 核：ACK 计划与规格范围一致，未提前扩大写集，继续等 DONE。"
+        },
+        {
+          "at": "2026-09-25T05:26",
+          "summary": "STATUS（05:26:34Z，MikejR2904，issue #44）：onboarding + 规划完成，还没写 kernel 代码。读了 AGENTS.md / PROTOCOL / START / A2-K1 规格 / a2_gdn_abi.md §1-6，核对了 A5 gdn_chunk_{fwd,bwd} 移植源（kernels/{pipeline,stages}.py、contract.json、ops/gdn_chunk_{fwd,bwd}.py）。在 task/A2-K1 分支（off upstream main）推到 fork MikejR2904/ascend_fla_dev_a2，新增 kernels/projects/a2/gdn_chunk_fwd/DESIGN.md：六项 ABI 缺口 1.1-1.7 对应到实现方式，L0C settle barrier 落点（fwd inverse / bwd finalize / bwd wu），测试计划（fp32 双 oracle、HV≠H 非对称 H=2/HV=4、分段 chaining、bd1==bd4 逐位、删 barrier 负对照），并记下了三条铁律（算子名加后缀、避开 C++ 关键字形参名、不支持就报错）。next：读 A5 gdn_chunk_fwd 的 stage 结构与 contract，搭 A2 单元骨架（HV 轴 + barrier 落点），在 910B3 上跑起双 oracle 测试。ETA 34h。\n两条 open_questions（PM 直接按规格回复，无需问用户，见下条 PM 回复评论）：\n①final_state 出货只用 fp32-state 还是两版都留——规格 §1.5 标题本身就是「final_state FP32（不是上游的 BF16）」，出货默认就是 fp32-state；bf16-state 版只是为了报 bf16 对 fp32 的差值证据，不是出货选项。\n②A2 的 MAX_GATE_SPAN 是否留空/标「未测（Batch B）」——规格「不在本批次的范围」一节已明确写此字段留空或标未测，门控跨度标定是 Batch B，另立任务。"
         }
       ],
       "result": null
