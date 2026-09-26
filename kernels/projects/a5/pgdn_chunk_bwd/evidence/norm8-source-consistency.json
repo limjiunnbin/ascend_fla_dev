@@ -21,7 +21,8 @@
       "production_and_frozen_reference_unchanged": true,
       "explicit_qualification_scope": null,
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -34,7 +35,8 @@
       "production_and_frozen_reference_unchanged": true,
       "explicit_qualification_scope": null,
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -94,7 +96,8 @@
         "required_followup": "Repeat the complete original matrix under fresh verified isolation; do not reclassify unrelated contexts as owned."
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -117,7 +120,36 @@
         "outer_launcher_returncode": 3
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
+      ],
+      "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+      "runtime_files": 205,
+      "oracle_sha256": "3baa67a5f35dc7230698e3f1761ec8675131318c15d4a27ed7f2fce11e84b5e8"
+    },
+    {
+      "label": "norm8-secondary-clamp-bd1-v1",
+      "execution_stage": "actual_native_execution",
+      "source_receipt": "evidence/native/norm8-secondary-clamp-bd1-v1/source-manifest.json",
+      "production_and_frozen_reference_unchanged": true,
+      "explicit_qualification_scope": null,
+      "other_files_changed_since_execution": [
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
+      ],
+      "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+      "runtime_files": 205,
+      "oracle_sha256": "3baa67a5f35dc7230698e3f1761ec8675131318c15d4a27ed7f2fce11e84b5e8"
+    },
+    {
+      "label": "norm8-secondary-clamp-bd2-v1",
+      "execution_stage": "actual_native_execution",
+      "source_receipt": "evidence/native/norm8-secondary-clamp-bd2-v1/source-manifest.json",
+      "production_and_frozen_reference_unchanged": true,
+      "explicit_qualification_scope": null,
+      "other_files_changed_since_execution": [
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -141,7 +173,8 @@
         "remediation": "Complete the vendor-declared compiler dependency in a task-owned venv; preserve this failed output and use a fresh complete-workload label."
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -168,7 +201,8 @@
         "remediation": "Retain failure and select the installed consistent CANN9.1 compiler/runtime for independent complete-workload validation. No fixed library or generated source was patched."
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -195,7 +229,22 @@
         "first_kernel_cce_compilation_and_packaging_complete": true
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
+      ],
+      "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+      "runtime_files": 205,
+      "oracle_sha256": "3baa67a5f35dc7230698e3f1761ec8675131318c15d4a27ed7f2fce11e84b5e8"
+    },
+    {
+      "label": "norm8-secondary-matrix-bd1-v5",
+      "execution_stage": "actual_native_execution",
+      "source_receipt": "evidence/native/norm8-secondary-matrix-bd1-v5/source-manifest.json",
+      "production_and_frozen_reference_unchanged": true,
+      "explicit_qualification_scope": null,
+      "other_files_changed_since_execution": [
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -219,7 +268,8 @@
         "remediation": "Complete the vendor-declared compiler dependency in a task-owned venv; preserve this failed output and use a fresh complete-workload label."
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -246,7 +296,8 @@
         "remediation": "Retain failure and select the installed consistent CANN9.1 compiler/runtime for independent complete-workload validation. No fixed library or generated source was patched."
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,
@@ -273,7 +324,36 @@
         "first_kernel_cce_compilation_and_packaging_complete": true
       },
       "other_files_changed_since_execution": [
-        "kernels/projects/a5/pgdn_chunk_bwd/README.md"
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
+      ],
+      "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+      "runtime_files": 205,
+      "oracle_sha256": "3baa67a5f35dc7230698e3f1761ec8675131318c15d4a27ed7f2fce11e84b5e8"
+    },
+    {
+      "label": "norm8-secondary-matrix-bd2-v5",
+      "execution_stage": "actual_native_execution",
+      "source_receipt": "evidence/native/norm8-secondary-matrix-bd2-v5/source-manifest.json",
+      "production_and_frozen_reference_unchanged": true,
+      "explicit_qualification_scope": null,
+      "other_files_changed_since_execution": [
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
+      ],
+      "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
+      "runtime_files": 205,
+      "oracle_sha256": "3baa67a5f35dc7230698e3f1761ec8675131318c15d4a27ed7f2fce11e84b5e8"
+    },
+    {
+      "label": "norm8-secondary-timing-bd2-v1",
+      "execution_stage": "actual_native_execution",
+      "source_receipt": "evidence/native/norm8-secondary-timing-bd2-v1/source-manifest.json",
+      "production_and_frozen_reference_unchanged": true,
+      "explicit_qualification_scope": null,
+      "other_files_changed_since_execution": [
+        "kernels/projects/a5/pgdn_chunk_bwd/README.md",
+        "kernels/projects/a5/pgdn_chunk_bwd/contract.json"
       ],
       "runtime_pin": "90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5",
       "runtime_files": 205,

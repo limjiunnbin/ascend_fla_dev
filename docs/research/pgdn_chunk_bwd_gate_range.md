@@ -51,16 +51,16 @@ The repaired first B1/T4096/H=HV8/mask7 case at bd1 satisfies all required
 checks; ordinary maximum relative L2 is 6.551130529696604e-7. The three original
 dense q/k/both failures at bd2 now have zero branch differences and satisfy
 ordinary budgets against both references. The evidence labels are
-`norm8-full-first-bd1-v1` and `norm8-dense-clamp-bd2-v1`. They are partial
-qualification only. Both runs were healthy with empty before/after checks;
+`norm8-full-first-bd1-v1` and `norm8-dense-clamp-bd2-v1`. These were intermediate checks; complete qualification is recorded below. Both runs were healthy with empty before/after checks;
 recorded during-run context sampling contains no unexplained foreign process.
 These runs used the earlier task lock convention. Subsequent complete matrices
 and measurements also acquire the canonical shared lock located in the ignored
 machine configuration. Lock identifiers are not public artifact data.
 
-The literal comparison here uses the recorded Torch2.12 AVX2 implementation;
-bitwise norm-branch agreement is not claimed for unmeasured CPU dispatch
-implementations. A new 73-case supplemental grid covers all seven cotangent
+The literal comparison here uses the explicitly recorded Torch2.12 AVX2 builds;
+bitwise norm-branch agreement is not claimed for unmeasured binary builds or
+CPU dispatch implementations. A matching Torch git and reported AVX2 capability
+alone do not establish the same literal floating-point execution. A new 73-case supplemental grid covers all seven cotangent
 subsets, dense q/k/both modes, multiple seeds, grouped heads, multiple chunks,
 one-ULP-adjacent clamp radii and a full T4096 case. It uses the same classifier,
 budgets, actual public output, independent-leaf and stage checks as the original
@@ -68,9 +68,8 @@ grid. Complete bd1/bd2 byte comparison rejects missing or mixed grids. The six
 frozen reference files are unchanged. Host regressions: 1358 passed, 10 skipped,
 5 existing CPU-stub warnings; targeted task regressions: 119 passed.
 
-The earlier qualification and timing records below apply to their explicitly
-listed grid and source revision. Overall task acceptance is blocked until the
-new boundary and original workloads are revalidated after repair.
+Earlier qualification and timing records remain under their original evidence
+labels and source revision; they are historical records. The repaired artifact has now completed both full grids and new same-card measurement, as recorded below.
 
 PK-05 implements a standalone A5 backward entry; forward dispatch and autograd
 wiring are outside this task. The source authority is FLA
@@ -205,7 +204,7 @@ A/B disclosure lists are retained as plain JSONL with content hashes in the unit
 evidence directory; overall numerical status remains nonPASS.
 
 Four CCE stages emitted for each of bd1/bd2 and static balance checks report
-no problems. Actual UB allocations are139808/67136/135808/4832bytes. Native results and observed whole-chain ranges are reported below, separately
+no problems. Repaired UB allocations are140032/67136/135808/4832bytes. Native results and observed whole-chain ranges are reported below, separately
 from these CPU/emission results. No simulator, CUDA/Triton or weight validation
 is claimed.
 
@@ -244,67 +243,116 @@ cross-environment byte identity. Every native result is compared to freshly
 computed A and B for its actual inputs; bd1/bd2 comparison separately requires
 identical input hashes before asserting identical output bytes.
 
-## Completed block_dim1 and block_dim2 native matrices
+## Repaired artifact: complete native matrices
 
-The complete frozen256-case matrix executed separately at bd1 and bd2 on A5/CCE with CANN9.2.0,
-Torch2.12.0 and torch_npu2.12.0. All20 stage outputs, independent leaf launches,
-composition, the public wrapper, normalization branch bits and input immutability
-met their required checks. This is actual vendor compilation/device execution.
-Identical runtime-generated inputs produced bit-identical values for all20
-returned stages and seven public gradients in all256 cases across block dimensions.
-Same-card measurement also completed, as recorded below. Hardware execution used
-`inprocess`; the explicit `aclnn`/`board` transport launchers remain untested.
+The earlier repaired-source bd1 run (`norm8-matrix-bd1-v1`) completed numerical
+checks, but1482 context samples included570 unexplained foreign samples from
+unrelated processes. Both pre/post idle and health checks succeeded; its
+`qualification-scope.json` excludes exclusive acceptance and performance.
+The first repaired-source bd2 run (`norm8-matrix-bd2-v1`) also completed
+numerical checks, but19 unexplained foreign samples began before its final
+report and post-run idle failed. It is likewise excluded from acceptance and
+performance. Two initial secondary attempts failed before device execution
+because the compiler Python environment lacked a vendor-declared dependency;
+those source receipts and the first errors are retained as diagnostics. The
+next attempts found a header-definition conflict in CANN9.2; the independently
+installed CANN9.1 toolchain was selected without changing pinned or generated
+source. That attempt compiled and packaged the first kernel but stopped at its installer's
+read-only log directory; new device containers then failed the DCMI precheck.
+All failed attempts have explicit non-acceptance scope. The qualified artifact
+is built in a device-free Docker and executed in the existing device Docker
+using the unchanged pinned source-cache validation. Every installed vendor
+file, harness executable and source stamp is hashed before and after actual
+execution; build and device receipts remain separate.
 
-Public ordinary-subset maximum relativeL2 across the256 cases (identical results at bd1/bd2):
+The following qualification uses only independently repeated secondary runs:
+`norm8-secondary-matrix-bd1-v5`, `norm8-secondary-matrix-bd2-v5`, and
+`norm8-secondary-clamp-bd1-v1` / `norm8-secondary-clamp-bd2-v1`. Their actual
+compiler, chip, Python and Torch identities are recorded in each receipt.
+The secondary CPU precheck originally used elementwise Tensor.sqrt to model
+norm's internal scalar sqrt. `norm8-cpu-environment-diagnostic.json` and the
+reproducible `diagnostics/norm8_cpu.py` retain that mismatch and locate the
+probe error:8192 rows have identical actual literal norm and scalar sqrtf bits
+in the two measured builds. No production/reference/budget change followed
+from that probe correction. CUDA was not executed.
 
-| Gradient | Against literal FP32 A | Against analytical FP32 B |
-|---|---:|---:|
-| dq | 3.9933345e-07 | 3.9662603e-07 |
-| dk | 4.2052579e-07 | 3.7563914e-07 |
-| dv | 4.3865543e-07 | 4.3843385e-07 |
-| dg_atk | 3.8724255e-06 | 2.0362367e-06 |
-| dg | 1.3101692e-06 | 1.448601e-06 |
-| dbeta_atk | 1.1249919e-06 | 7.3853813e-07 |
-| dbeta | 6.3747901e-07 | 6.7390801e-07 |
+Actual A5/CCE execution completed the original256 and supplemental73 cases at
+each block dimension1/2. All20 stages, independent leaves, composition, actual
+public output, clamp branch bits and input immutability meet the required
+checks. Both complete grids have identical input hashes and byte-identical
+returned stages and public gradients across bd1/bd2. The largest ordinary
+relativeL2 against either A/B reference is 4.1356284098271835e-06.
 
-The public outputs contain66,581,570 disclosure-only elements per block dimension across all cases,
-including structurally absent cotangent paths. Every position and payload is
-retained; no relative pass threshold is applied to these elements. Aggregate
-counts by reason, maximum absolute output/error, finite global-norm contribution
-and undefined/infinite denominator counts are in
-`evidence/summary-matrix-bd1-v2.json`; the individual records are under
-`evidence/native/matrix-bd1-v2/`. Overall numerical status remains
-**numerical disclosure complete, nonPASS**.
+| Public gradient | Maximum against literal FP32 A | Maximum against analytical FP32 B |
+| --- | ---: | ---: |
+| dq | 3.94661822e-07 | 3.86331842e-07 |
+| dk | 4.27346014e-07 | 3.32822648e-07 |
+| dv | 4.29040179e-07 | 4.28473293e-07 |
+| dg_atk | 4.13562841e-06 | 2.90040605e-06 |
+| dg | 1.19273243e-06 | 1.20249031e-06 |
+| dbeta_atk | 1.17760375e-06 | 6.05400248e-07 |
+| dbeta | 9.72447074e-07 | 8.92385031e-07 |
 
-All returned stage values in this grid were finite. Observed native ATK history
-ranges from0 to19.5137138367, read/write-key cotangent parts have absolute maxima
-0.109108791/0.222435489, and dq/dk absolute maxima are6.938435072e9/2.43161366528e11.
-These device observations cover the complete grid, while the preceding CPU
-whole-chain table covers its explicitly named seven cases; neither is a bound
-for arbitrary finite input magnitudes.
+Public disclosure elements: bd1=67662570, bd2=67662570. Every element
+position and payload is retained in the complete per-case JSONL. No relative
+pass threshold is applied to disclosures, and overall status remains
+**numerical disclosure complete, nonPASS**. The four norm8 summary JSON files
+include complete per-gradient/reason counts and observed device ranges; these
+are observed ranges on the listed grids, not bounds for arbitrary FP32 values.
+`norm8-source-consistency.json` links delivered production/frozen-reference
+hashes to every repaired execution. Legacy evidence is retained with its
+original source identity. The explicit aclnn/board transport launchers remain
+untested; these results use the actual inprocess native launcher.
 
-## Same-card measurement
+Observed device values across both complete grids and block dimensions:
+these are measured ranges, not bounds for arbitrary finite inputs. Every listed
+tensor has zero observed nonfinite elements. Exact per-case values remain in
+the numerical reports.
 
-The shape is B1/H=HV8/K=V128, FP32, bd2. Each leg has10 warmups and50 samples,
-with synchronization immediately before/after every timed call. Times are public-call
-wall latency, including validation and allocation. A fresh healthy,
-idle device check and shared lock cover the complete run; live context sampling
-found no unexplained foreign occupant. CPU references finish before timing, and
-all three rounds have classified numerical/disclosure checks before and after.
+| Stage tensor | Observed minimum | Observed maximum |
+| --- | ---: | ---: |
+| q_norm | -0.443489342928 | 1 |
+| k_read | -0.423209398985 | 1 |
+| k_write | -0.531184971333 | 1.20781362057 |
+| A_history | 0 | 19.5137138367 |
+| q_raw_norm | 0 | 2 |
+| k_raw_norm | 0 | 2 |
+| final_A_state | 0 | 19.5137138367 |
+| checkpoints | -0.166130647063 | 0.15358954668 |
+| final_state | -0.121090173721 | 0.120301358402 |
+| tape | -0.130987972021 | 0.133448287845 |
+| dq_norm_parts | -0.014746136032 | 0.0159219373018 |
+| dk_read_parts | -0.104225963354 | 0.109108775854 |
+| dk_write_parts | -0.226547166705 | 0.195417672396 |
+| dv | -0.405002593994 | 0.371921092272 |
+| dg | -0.578243970871 | 0.837932705879 |
+| dbeta | -0.195531517267 | 0.225399181247 |
+| dq | -9935822848 | 13162290176 |
+| dk | -326637846528 | 402086494208 |
+| dg_atk | -26.8955955505 | 16.469461441 |
+| dbeta_atk | -3.18423056602 | 2.5711171627 |
 
-The baseline reuses this implementation's saved normalization/ATK tapes and main
-checkpoints. It excludes stage1/2 device computation but retains public validation
-and all allocations, including unused forward outputs. The candidate includes
-all four device stages. This measures the cost of forward-state regeneration;
-it is not a comparison against another full backward backend or a speedup claim.
-Raw samples and both numerical controls are retained in
-`evidence/native/timing-bd2-v3/measurement.json`.
+## Repaired artifact: same-card measurement
+
+B1/H=HV8/K=V128, FP32, bd2. Each leg uses10 warmups and50 samples, synchronized
+immediately before and after each public call. Wall latency includes input
+validation and allocation. Canonical per-device and task-private locks plus before/after
+healthy/idle checks cover each run, with no unexplained foreign context in
+recorded samples. CPU references finish before timing; all rounds retain
+before/after classified numerical checks and disclosures.
+
+The baseline caches this candidate's normalization/ATK tapes and main
+checkpoints. It excludes stage1/2 device computation but retains validation
+and all allocations, including unused forward outputs. The candidate performs
+all four stages. This records regeneration cost, not another complete backward
+backend or a speedup claim. Every sample is retained in
+`evidence/native/norm8-secondary-timing-bd2-v1/measurement.json`.
 
 | T | Round | Baseline before median ms | Complete backward median ms | Baseline after median ms |
-|---:|---:|---:|---:|---:|
-| 1024 | 1 | 152.616134 | 180.573714 | 152.637541 |
-| 1024 | 2 | 152.560785 | 180.501385 | 152.604458 |
-| 1024 | 3 | 152.607138 | 180.486165 | 152.541770 |
-| 4096 | 1 | 610.201349 | 726.719444 | 610.426498 |
-| 4096 | 2 | 610.543846 | 727.035825 | 610.347384 |
-| 4096 | 3 | 610.657986 | 726.575541 | 611.274502 |
+| ---: | ---: | ---: | ---: | ---: |
+| 1024 | 1 | 11.062093 | 12.980858 | 11.069886 |
+| 1024 | 2 | 11.080801 | 12.980252 | 11.071163 |
+| 1024 | 3 | 11.083341 | 12.980973 | 11.080091 |
+| 4096 | 1 | 46.451332 | 55.668111 | 46.430295 |
+| 4096 | 2 | 46.450776 | 55.677931 | 46.446940 |
+| 4096 | 3 | 46.447205 | 55.720745 | 46.434281 |

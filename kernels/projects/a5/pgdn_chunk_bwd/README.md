@@ -1,15 +1,5 @@
 # PGDN FP32 chunk backward (PK-05)
 
-**Full requalification pending:** the repair completed the supplemental73
-cases at bd1/bd2 with byte-identical stage/public outputs on the original
-environment. Its original256 bd1/bd2 numerical checks also completed, but
-foreign device contexts invalidate those two isolation receipts. They remain
-explicitly diagnostic evidence, not acceptance or timing. Alternate-environment
-full native qualification and new same-card measurements are still required;
-PR #134 remains a draft. Compiler/environment failures are retained separately,
-and `evidence/norm8-cpu-environment-diagnostic.json` records the located CPU
-probe correction without changing production, references or numerical budgets.
-
 This standalone A5/CCE unit computes `dq, dk, dv, dg_atk, dg, dbeta_atk,
 dbeta` for the loss `<do,o> + <dht,final_state> + <dA_T,final_A_state>`.
 At least one cotangent must be supplied. The public adapter is
@@ -91,14 +81,18 @@ python run.py reference --case full_r1_m7_bd2 --output <fresh-reference-director
 python benchmark.py --block-dim 1 --output <fresh-bd1-directory> --oracle-workers 4
 python benchmark.py --block-dim 2 --output <fresh-bd2-directory> --oracle-workers 4
 python compare_runs.py <bd1-qualification.json> <bd2-qualification.json> --output <comparison.json>
+python benchmark.py --supplemental-clamp --block-dim 1 --output <fresh-clamp-bd1-directory> --oracle-workers 4
+python benchmark.py --supplemental-clamp --block-dim 2 --output <fresh-clamp-bd2-directory> --oracle-workers 4
+python compare_runs.py <clamp-bd1-qualification.json> <clamp-bd2-qualification.json> --output <clamp-comparison.json>
 python measure.py --block-dim 2 --output <fresh-measurement-directory>
 ```
 
 The public benchmark exercises actual `None` cotangents, poisoned outputs,
 input immutability, independent leaf launches and composition, public output
 bytes, internal stage values, clamp branch bits and classified A/B comparison.
-The bd comparison requires the complete256-case grid and identical inputs,
-20 stage hashes and seven public output hashes.
+The bd comparison requires the complete selected grid (original256 or
+supplemental73) and identical inputs, 20 stage hashes and seven public output
+hashes. Missing, duplicate or mixed grids are rejected.
 
 Native evidence in this task uses the `inprocess` launcher inside the accepted
 Docker environment. The explicit CPU-input `aclnn` and `board` transport paths
@@ -116,34 +110,42 @@ CUDA/Triton comparison. Numerical checks and disclosures bracket every round.
 
 ## Evidence status
 
-The frozen256-case CPU calibration satisfies every ordinary A/B budget; maximum
-relativeL2 is2.9902082636512436e-6. Both references passed six FP64 gradchecks.
-`evidence/classification-freeze.json` pins the six reference-source hashes.
-The complete512 A/B disclosure lists are plain JSONL, with content hashes.
+The unchanged frozen256-case CPU calibration satisfies every ordinary A/B
+budget, with maximum relativeL2=2.9902082636512436e-6. Both references passed
+six FP64 gradchecks away from the normalization kink. The complete512 A/B
+disclosure lists and six frozen reference hashes remain in the evidence.
 
-Actual A5/CCE execution completed256 cases at each of bd1 and bd2, in separate
-processes/builds. All20 returned stages and seven public gradients are byte
-identical for identical runtime-generated inputs. Ordinary comparisons against
-both A and B satisfy1e-4; their maximum is3.872425474189693e-6. Each matrix has
-66,581,570 public disclosure-only elements, with every position/value retained.
-The overall numerical status is **numerical disclosure complete, nonPASS**;
-`contract.json` therefore does not mark its numerical board stage passed.
+The repaired artifact completed the original256 and supplemental73 cases at
+both bd1 and bd2, with all required actual-output checks. Identical runtime
+inputs give byte-identical values for all20 stages and seven public gradients
+in each complete grid. The maximum ordinary-subset relativeL2 against either
+independent reference is 4.1356284098271835e-06, within the unchanged1e-4 budget.
+Public disclosure elements are bd1=67,662,570 and bd2=67,662,570;
+every indexed payload is retained. Overall numerical status is **numerical disclosure complete, nonPASS**.
 
-Start review with `evidence/summary-matrix-bd1-v2.json`,
-`evidence/summary-matrix-bd2-v3.json` and `evidence/block-dim-comparison.json`.
-Full per-case records, disclosure JSONL and sanitized execution/source receipts
-are under `evidence/native/`. `evidence/source-consistency.json` links the
-unchanged production and frozen-reference sources to each executed snapshot.
-Raw tensors and logs containing machine bindings stay in private ignored storage.
+See `evidence/norm8-qualification-summary.json`, both norm8 byte comparisons,
+the four norm8 matrix summaries and `evidence/norm8-source-consistency.json`.
+The original c8e7073 dense-clamp failure and older successful-grid evidence are
+historical records; they do not stand in for the repaired artifact's runs.
+The six frozen references, classification rules and budgets remain unchanged.
 
-Three same-card sandwiches completed for each of T1024/4096, with10 warmups and
-50 synchronized samples per leg. The exact baseline scope is stated above;
-`evidence/native/timing-bd2-v3/measurement.json` retains every sample and numerical
-checks/disclosures before and after each round. The range study gives the medians.
-There is no separate full-backward backend or CUDA/Triton speedup claim.
+The earlier repaired-source `norm8-matrix-bd1-v1` and `norm8-matrix-bd2-v1`
+numerical runs observed unrelated device contexts despite both locks. Their
+complete numerical evidence is retained with `qualification-scope.json`
+explicitly excluding exclusive acceptance and performance. The qualified
+original grids are the secondary v5 runs, followed by secondary supplemental
+v1 runs. Builds use device-free Docker; actual execution uses the existing
+device Docker. Each run hashes all100 installed vendor files, harnesses and
+source stamps before and after execution. Build and device receipts are separate.
 
-Host regression:1354 passed,10 skipped,5 existing CPU-stub warnings. The actual
-Docker environment's CPU task regressions:115 passed. Matrix/PM-board checks
-passed. Vendor warnings were investigated and retained without suppression in
-`evidence/vendor-warning-assessment.json`. No simulator, pipesim or weight
+Three new same-card sandwiches for each of T1024/4096 use10 warmups and50
+synchronized samples per leg, with classified checks/disclosures before and
+after every round. All samples are in `evidence/native/norm8-secondary-timing-bd2-v1/`.
+This is public-call wall latency including validation/allocation, compared to
+the precisely declared cached-forward-state baseline, with no speedup claim.
+
+Host regressions:1358 passed,10 skipped,5 existing CPU-stub warnings. Actual
+Docker CPU task regressions:119 passed. Vendor diagnostics are investigated
+and retained without suppression in `evidence/norm8-vendor-warning-assessment.json`.
+No simulator, pipesim, CUDA/Triton or weight
 validation is claimed. Machine configuration remains external and ignored.

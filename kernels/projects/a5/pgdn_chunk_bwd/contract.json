@@ -7592,18 +7592,18 @@
       "backend": "cce",
       "stage": "compile",
       "status": "passed",
-      "notes": "All four CCE stages vendor-compiled and loaded for bd1/bd2 in separate native processes/builds; CANN9.2.0."
+      "notes": "Repaired four-stage CCE artifact vendor-compiled, linked and installed for bd1/bd2 with CANN9.1.0-beta.1 in device-free Docker. Existing device Docker verifies and loads the same100 hashed artifacts per run; separate build/device receipts. Historical CANN9.2.0 compilation evidence is retained under its original labels."
     },
     {
       "device": "a5",
       "backend": "cce",
       "stage": "board",
       "status": "failed",
-      "notes": "Historical original256 grid had ordinary budgets satisfied with numerical disclosures (nonPASS), but dense-clamp supplementation exposed an ordinary-gradient failure. The repair satisfies the original three failure cases and full-first case; complete requalification remains pending."
+      "notes": "Numerical disclosure complete, nonPASS. Repaired artifact completed the original256 and supplemental73 cases at bd1/bd2, all ordinary A/B budgets and required stage/branch/schema/input checks, and full byte comparisons. The original dense-clamp failure is retained as historical evidence. Only actual inprocess execution is qualified; other launchers remain untested."
     }
   ],
   "qualification": {
-    "status": "pending_norm8_full_qualification",
+    "status": "complete_with_numerical_disclosure_nonpass",
     "reference_pilot": {
       "cases": 11,
       "ordinary_budget_satisfied": true,
@@ -7618,23 +7618,33 @@
       "evidence": "evidence/cpu-calibration.json"
     },
     "native": {
-      "cases_per_block_dimension": 256,
+      "cases_per_block_dimension": 329,
+      "original_cases": 256,
+      "supplemental_cases": 73,
       "block_dimensions": [
         1,
         2
       ],
       "required_checks_complete": true,
       "ordinary_budget_satisfied": true,
-      "max_ordinary_relative_l2": 3.872425474189693e-06,
+      "max_ordinary_relative_l2": 4.1356284098271835e-06,
       "disclosure_complete": true,
-      "public_disclosure_elements_per_block_dimension": 66581570,
+      "public_disclosure_elements_per_block_dimension": {
+        "1": 67662570,
+        "2": 67662570
+      },
       "numerical_status": "numerical_disclosure_complete_nonpass",
       "all_stage_and_public_outputs_byte_identical": true,
       "evidence": [
-        "evidence/native/matrix-bd1-v2/qualification.json",
-        "evidence/native/matrix-bd2-v3/qualification.json"
+        "evidence/native/norm8-secondary-matrix-bd1-v5/qualification.json",
+        "evidence/native/norm8-secondary-matrix-bd2-v5/qualification.json",
+        "evidence/native/norm8-secondary-clamp-bd1-v1/qualification.json",
+        "evidence/native/norm8-secondary-clamp-bd2-v1/qualification.json"
       ],
-      "byte_comparison": "evidence/block-dim-comparison.json"
+      "byte_comparisons": [
+        "evidence/norm8-block-dim-comparison.json",
+        "evidence/norm8-clamp-block-dim-comparison.json"
+      ]
     },
     "no_numerical_pass_claim": true,
     "same_card_measurement": {
@@ -7647,7 +7657,7 @@
       "rounds": 3,
       "warmup": 10,
       "repeat": 50,
-      "evidence": "evidence/native/timing-bd2-v3/measurement.json",
+      "evidence": "evidence/native/norm8-secondary-timing-bd2-v1/measurement.json",
       "baseline": "Same task-owned adjoint with saved normalization/ATK tapes and main chunk checkpoints; excludes all stage1/2 device computation, includes public validation and all pipeline allocation (including unused stage1/2 outputs)."
     },
     "supplemental_dense_clamp": {
@@ -7655,20 +7665,39 @@
       "evidence": "evidence/native/dense-clamp-bd2-v3/diagnostic.json",
       "budget_unchanged": true,
       "frozen_references_unchanged": true,
-      "original_grid_results_retained": true
+      "original_grid_results_retained": true,
+      "artifact_commit": "c8e707337e0734113fa1c3a457c5318b4413dd48",
+      "scope": "Historical failure before the norm8 repair; current qualification is recorded in norm8_repair."
     },
     "norm8_repair": {
-      "status": "partial_qualification_complete",
-      "evidence": [
-        "evidence/native/norm8-full-first-bd1-v1/qualification.json",
-        "evidence/native/norm8-dense-clamp-bd2-v1/diagnostic.json"
+      "status": "complete_with_numerical_disclosure_nonpass",
+      "original_cases_per_bd": 256,
+      "supplemental_cases_per_bd": 73,
+      "ordinary_max_relative_l2": 4.1356284098271835e-06,
+      "public_disclosure_elements_per_bd": {
+        "1": 67662570,
+        "2": 67662570
+      },
+      "labels": [
+        "norm8-secondary-matrix-bd1-v5",
+        "norm8-secondary-matrix-bd2-v5",
+        "norm8-secondary-clamp-bd1-v1",
+        "norm8-secondary-clamp-bd2-v1"
       ],
-      "pending": [
-        "original256_both_block_dimensions",
-        "supplemental73_both_block_dimensions",
-        "full_byte_comparisons",
-        "new_same_card_measurements"
-      ]
+      "byte_comparisons": [
+        "norm8-block-dim-comparison.json",
+        "norm8-clamp-block-dim-comparison.json"
+      ],
+      "timing": "norm8-secondary-timing-bd2-v1",
+      "host_tests": {
+        "passed": 1358,
+        "skipped": 10,
+        "baseline_warnings": 5
+      },
+      "docker_cpu_tests": {
+        "passed": 119
+      },
+      "frozen_reference_hashes_unchanged": true
     }
   },
   "provenance": {
