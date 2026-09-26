@@ -2915,8 +2915,7 @@
       "wave": "W-A2",
       "soc": "a2",
       "priority": "P1",
-      "status": "gated",
-      "gate": "用户已放行（D-PM-43），待前置任务与规格",
+      "status": "assigned",
       "model": [
         "kimi-linear-48b-a3b"
       ],
@@ -2924,6 +2923,7 @@
         "kda_fused_recurrent"
       ],
       "dtype": [
+        "bf16",
         "fp32"
       ],
       "deps": [
@@ -2931,24 +2931,44 @@
       ],
       "write_set": [
         "benchmarks/verify_decode.py",
-        "tests/test_kda_decode.py"
+        "tests/test_kda_decode.py",
+        "kernels/projects/a2/kda_fused_recurrent/contract.json",
+        "kernels/projects/a2/kda_fused_recurrent/README.md",
+        "ascend_fla/platform.py"
       ],
       "needs": {
         "npu": true,
         "ascriptor": true,
         "fla": false
       },
-      "spec": null,
+      "spec": "docs/pm/tasks/A2-14.md",
       "issue": 41,
       "pr": null,
-      "assignee": null,
-      "assignee_caps": null,
-      "branch": null,
+      "assignee": "limjiunnbin",
+      "assignee_caps": {
+        "agent": "Codex / GPT-6",
+        "socs": [
+          "a2",
+          "a5"
+        ],
+        "soc_details": "a2: 本轮刚实测确认 Docker 内可见 Ascend910B3；npu-smi 显示设备健康并有多张无运行进程的卡。CANN 9.0.0（V100R001C10SPC001B250），compiler/OPP timestamp 20260428_134817545；内置 OPP 包含 ascend910b / ascend910_93。已核实际导入 Python 3.11.15 / Torch 2.10.0+cpu / torch_npu 2.10.0。a5: 两套 Docker 通道，CANN 9.1.0-beta.1 与 9.2.0；本任务不用。",
+        "ascriptor": "yes 90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5 (kernels b3b3f9c16df7c4626ed3c081032a1be5a753d0b1)",
+        "fla": "not needed for this unit (decode CPU 参考是本仓自己的 reference.py)",
+        "python": "A2 Docker Python 3.11.15 / Torch 2.10.0+cpu / torch_npu 2.10.0",
+        "fork": "limjiunnbin/ascend_fla_dev",
+        "availability": "同步在线，正式派单后立即 ACK 并完成实现、真机验证、PR 与审查返工",
+        "session": "01a0b7ce-3daf-7550-a7bf-31c67eb91ca3"
+      },
+      "branch": "task/A2-14",
       "timebox_h": 10,
       "reports": [
         {
           "at": "2026-09-20T03:48",
           "summary": "用户 2026-09-20 放行（D-PM-43「其他的也放行」）：原 gate = machines:a2。规格未写、前置未完成，所以状态位仍是 gated、gate 文案改成「用户已放行，待前置任务与规格」；PM 在前置完成、规格写好时改 open，不再问用户。"
+        },
+        {
+          "at": "2026-09-26T02:10",
+          "summary": "ASSIGN（PM）。规格已写入 docs/pm/tasks/A2-14.md：真实 Kimi-Linear 形状（H=HV=32）acc 双 oracle、chunk↔decode 状态传递一致性、bd∈{1,2}/GQA split 逐位比对、splitK 豁免记录、platform.py 补 decode block_dim 能力表、contract.json 的 board stage 按 A2-11 新规则落地。申领人 source_check（真实 ABI 是 q/k/v/o BF16、g/beta/h0/final_state FP32，看板旧 dtype=['fp32'] 是粗粒度骨架标签，与契约不一致）已核实为真，dtype 字段已订正为 ['bf16','fp32']；write_set 补上 ascend_fla/platform.py（只改 CAPABILITIES['a2']['supported_block_dim'] 这一个字典字面量，同 A2-12 的约束）。公共入口路由/新 dtype 实现明确不在范围（与 A2-12 对 chunk 路径的先例对称）；A2-13 与本任务互不依赖，写集不重叠，可任意顺序或并行。"
         }
       ],
       "result": null
@@ -4979,7 +4999,7 @@
       "wave": "W0",
       "soc": "a5",
       "priority": "P1",
-      "status": "open",
+      "status": "assigned",
       "model": [],
       "kernel": [
         "pgdn_chunk_bwd"
@@ -5006,8 +5026,20 @@
       "spec": "docs/pm/tasks/PK-05.md",
       "issue": 93,
       "pr": null,
-      "assignee": null,
-      "assignee_caps": {},
+      "assignee": "limjiunnbin",
+      "assignee_caps": {
+        "agent": "Codex / GPT-6",
+        "socs": [
+          "a5"
+        ],
+        "soc_details": "本轮重新实查 Docker 内 Ascend950PR_9589V100；CANN 9.2.0，compiler timestamp 20260805_101249091；OPP 含 ascend950、ascend910b、ascend910_93。共享锁内只读预检已确认可选卡 Healthy，安装驱动的 SVM/TRS 两套 live context registry 均为空；本轮未编译或启动任何 kernel workload。",
+        "ascriptor": "yes library 90cfcdc720bbcd66e8bd4361c4dd4fbc1a2a57b5 / kernels b3b3f9c16df7c4626ed3c081032a1be5a753d0b1；本地选定 source trees clean",
+        "fla": "yes e52dbc0ea19d3a40d7ab7f9eed855d2b473994d2；literal PGDN naive 已重新读取",
+        "python": "host Python 3.11 / torch 2.10 / pytest；Docker Python 3.12.13 / torch 2.12.0+cpu / torch_npu 2.12.0 / pytest 9.1.1",
+        "fork": "limjiunnbin/ascend_fla_dev",
+        "availability": "当前在线推进；交付后定时核对 REVIEW/合入及下一任务",
+        "session": "dev-20260926T010004Z-0375dde8"
+      },
       "branch": "task/PK-05",
       "timebox_h": 24,
       "reports": [
@@ -5054,6 +5086,10 @@
         {
           "at": "2026-09-25T09:12",
           "summary": "24h 未 ACK（ASSIGN 2026-09-23T13:12:32Z，issue #93 的 ASSIGN 评论）。核对了 #93 从 ASSIGN 时刻起的全部评论——只有 PM 自己发的那一条 ASSIGN，没有任何 ACK（也没有其它任何协议消息）。按 PROTOCOL §3.3「24 小时没有 ACK，任务退回 open」收回，回 open，分支 task/PK-05 保留。清空 assignee / assignee_caps；PK-05.md 里的「PM 裁定」一节（近零真导数分类方法论）继续有效，不因收回而重新讨论——下一个申领人直接按既有裁定接。"
+        },
+        {
+          "at": "2026-09-26T02:10",
+          "summary": "ASSIGN（PM，重新派给新 session dev-20260926T010004Z-0375dde8；上一 ASSIGN 已因 24h 未 ACK 收回）。同一轮里申领人在 #93 补了一条「预检补充」（5841846654，FP32 ULP 判据落地提案），PM 已就该提案单独回复裁定（见下一条 report），三点均确认、无需放宽预算，不阻塞本次 ASSIGN。"
         }
       ],
       "result": null,
