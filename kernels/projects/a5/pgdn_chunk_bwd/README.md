@@ -1,9 +1,9 @@
 # PGDN FP32 chunk backward (PK-05)
 
-**Acceptance blocked:** supplemental dense-at-clamp cases expose ordinary dq/dk
-errors above the frozen budget. PR #134 remains a draft. The original 256-case
-results below are historical grid evidence, not completed domain qualification.
-See the dense-clamp failure section in the range study.
+**Full requalification pending:** the original dense-at-clamp failure is
+retained below. The repair satisfies the three original failure cases and the
+first full T4096 case; the complete original and supplemental matrices plus
+new same-card measurements are still required. PR #134 remains a draft.
 
 This standalone A5/CCE unit computes `dq, dk, dv, dg_atk, dg, dbeta_atk,
 dbeta` for the loss `<do,o> + <dht,final_state> + <dA_T,final_A_state>`.
@@ -25,7 +25,7 @@ execute in the four task-owned device kernels.
 
 | Stage | Work | UB bytes / buffers |
 | --- | --- | --- |
-| pgdn_bwd_atk | Normalize q/k and save every per-H ATK state | 139808 / 10 |
+| pgdn_bwd_atk | Normalize q/k and save every per-H ATK state | 140032 / 10 |
 | pgdn_bwd_checkpoints | Save the main state before each64-token chunk | 67136 / 6 |
 | pgdn_bwd_reverse | Replay one chunk, then reverse its main recurrence perHV | 135808 / 15 |
 | pgdn_bwd_atk_reverse | Sum consecutive value-head contributions, reverse ATK and normalization perH | 4832 / 16 |

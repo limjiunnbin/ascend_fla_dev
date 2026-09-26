@@ -73,5 +73,7 @@
     "First-run to matrix harness changes add retained device ranges, independent stage/byte-comparison helpers and range-observer instrumentation; production and frozen reference math are unchanged.",
     "Between bd1 and bd2 only successful-report-neutral failure-status handling and whitespace changed in the harness; no failed/nonfinite case occurred in bd1.",
     "Final documentation and contract qualification status summarize completed evidence."
-  ]
+  ],
+  "artifact_commit": "c8e707337e0734113fa1c3a457c5318b4413dd48",
+  "scope": "Historical pre-repair artifact; current repair identities are in norm8-source-consistency.json."
 }

@@ -7599,11 +7599,11 @@
       "backend": "cce",
       "stage": "board",
       "status": "failed",
-      "notes": "Numerical disclosure complete, nonPASS. Complete256 cases at each bd1/bd2 satisfy ordinary A/B budgets and all required stage/schema/branch/input checks; all20 stages and7 public gradients byte-identical. Actual inprocess device execution; other transport launchers remain untested. Supplemental dense-at-clamp cases fail ordinary dq/dk budgets; full task acceptance is blocked, not complete."
+      "notes": "Historical original256 grid had ordinary budgets satisfied with numerical disclosures (nonPASS), but dense-clamp supplementation exposed an ordinary-gradient failure. The repair satisfies the original three failure cases and full-first case; complete requalification remains pending."
     }
   ],
   "qualification": {
-    "status": "blocked_dense_clamp_branch_failure",
+    "status": "pending_norm8_full_qualification",
     "reference_pilot": {
       "cases": 11,
       "ordinary_budget_satisfied": true,
@@ -7656,6 +7656,19 @@
       "budget_unchanged": true,
       "frozen_references_unchanged": true,
       "original_grid_results_retained": true
+    },
+    "norm8_repair": {
+      "status": "partial_qualification_complete",
+      "evidence": [
+        "evidence/native/norm8-full-first-bd1-v1/qualification.json",
+        "evidence/native/norm8-dense-clamp-bd2-v1/diagnostic.json"
+      ],
+      "pending": [
+        "original256_both_block_dimensions",
+        "supplemental73_both_block_dimensions",
+        "full_byte_comparisons",
+        "new_same_card_measurements"
+      ]
     }
   },
   "provenance": {

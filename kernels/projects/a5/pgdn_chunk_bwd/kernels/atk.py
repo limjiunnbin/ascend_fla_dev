@@ -24,13 +24,26 @@ def atk_tile(q: Tensor, k: Tensor, write: Tensor, history: Tensor,
     r = RegList(DT.float, 2)
     denom = RegList(DT.float, 2)
     norm = Reg(DT.float)
+    norm_acc = Reg(DT.float)
+    norm_piece = Reg(DT.float)
     decay = Reg(DT.float)
     update = Reg(DT.float)
     ar <<= state[0:1, 0:D]
     for i in range(C):
         qr <<= q[i:i+1, 0:D]
-        tmp <<= qr * qr
-        norm <<= tmp.cadd()
+        # Literal FP32 AVX2 norm: eight lanes, then sequential lane sum.
+        # BRCB reads exactly eight FP32 values and repeats each over a block.
+        norm_acc <<= 0.0
+        for j in range(D // 8):
+            norm_piece <<= q[i:i+1, j*8:j*8+8].brcb()
+            norm_piece <<= norm_piece * norm_piece
+            norm_acc <<= norm_acc + norm_piece
+        scalar[0:1, 0:64] <<= norm_acc
+        vf_barrier(VfPipe.STORE, VfPipe.LOAD)
+        norm <<= scalar[0:1, 0:1].single()
+        for j in range(1, 8):
+            norm_piece <<= scalar[0:1, j*8:j*8+1].single()
+            norm <<= norm + norm_piece
         norm <<= norm.sqrt()
         qnorm[i:i+1, 0:1] <<= norm.single_value()
         norm <<= norm.vmaxs(1e-12)
@@ -40,8 +53,17 @@ def atk_tile(q: Tensor, k: Tensor, write: Tensor, history: Tensor,
         qr <<= qr / norm
         q[i:i+1, 0:D] <<= qr
         kr <<= k[i:i+1, 0:D]
-        tmp <<= kr * kr
-        norm <<= tmp.cadd()
+        norm_acc <<= 0.0
+        for j in range(D // 8):
+            norm_piece <<= k[i:i+1, j*8:j*8+8].brcb()
+            norm_piece <<= norm_piece * norm_piece
+            norm_acc <<= norm_acc + norm_piece
+        scalar[0:1, 0:64] <<= norm_acc
+        vf_barrier(VfPipe.STORE, VfPipe.LOAD)
+        norm <<= scalar[0:1, 0:1].single()
+        for j in range(1, 8):
+            norm_piece <<= scalar[0:1, j*8:j*8+1].single()
+            norm <<= norm + norm_piece
         norm <<= norm.sqrt()
         knorm[i:i+1, 0:1] <<= norm.single_value()
         norm <<= norm.vmaxs(1e-12)
@@ -90,7 +112,7 @@ def pgdn_bwd_atk(
     qnu = Tensor(DT.float, [C,8], Position.UB)
     knu = Tensor(DT.float, [C,8], Position.UB)
     au = Tensor(DT.float, [1,D], Position.UB)
-    scalar = Tensor(DT.float, [1,8], Position.UB)
+    scalar = Tensor(DT.float, [1,64], Position.UB)
     per = CeilDiv(B*H, GetVecNum())
     begin = Var(per*GetVecIdx())
     end = Min(begin+per, B*H)

@@ -1,6 +1,6 @@
 # PGDN FP32 backward: ABI, classification and range contract
 
-## Supplemental dense-clamp failure (acceptance blocked)
+## Historical dense-clamp failure and repair qualification
 
 Commit `c8e707337e0734113fa1c3a457c5318b4413dd48` fails a supported
 normalization boundary omitted from the original grid. At B1/T64/H1/HV2,
@@ -38,6 +38,35 @@ rows reproduces every literal norm bit with eight lanes and separately rounded
 multiply/add; fused or four/sixteen-lane variants differ. This is source and CPU
 evidence for repair design, not a native repair claim. Budgets, classifiers,
 near-zero input support, and the six frozen reference files remain unchanged.
+
+The current repair replaces only the task-owned ATK kernel's raw-norm
+reduction with the literal eight-lane FP32 schedule. `Tensor.brcb` emits
+`E2B_B32`, reading eight values and broadcasting each to its 32-byte block.
+Sixteen separately rounded multiply/add steps precede eight sequential scalar
+loads/additions and square root. Its 64-element scratch is fully initialized
+and published before scalar loads; stage1 UB is 140032 bytes / 10 buffers.
+All four stages emitted for bd1/bd2, with empty static event-balance diagnostics.
+
+The repaired first B1/T4096/H=HV8/mask7 case at bd1 satisfies all required
+checks; ordinary maximum relative L2 is 6.551130529696604e-7. The three original
+dense q/k/both failures at bd2 now have zero branch differences and satisfy
+ordinary budgets against both references. The evidence labels are
+`norm8-full-first-bd1-v1` and `norm8-dense-clamp-bd2-v1`. They are partial
+qualification only. Both runs were healthy with empty before/after checks;
+recorded during-run context sampling contains no unexplained foreign process.
+These runs used the earlier task lock convention. Subsequent complete matrices
+and measurements also acquire the canonical shared lock located in the ignored
+machine configuration. Lock identifiers are not public artifact data.
+
+The literal comparison here uses the recorded Torch2.12 AVX2 implementation;
+bitwise norm-branch agreement is not claimed for unmeasured CPU dispatch
+implementations. A new 73-case supplemental grid covers all seven cotangent
+subsets, dense q/k/both modes, multiple seeds, grouped heads, multiple chunks,
+one-ULP-adjacent clamp radii and a full T4096 case. It uses the same classifier,
+budgets, actual public output, independent-leaf and stage checks as the original
+grid. Complete bd1/bd2 byte comparison rejects missing or mixed grids. The six
+frozen reference files are unchanged. Host regressions: 1358 passed, 10 skipped,
+5 existing CPU-stub warnings; targeted task regressions: 119 passed.
 
 The earlier qualification and timing records below apply to their explicitly
 listed grid and source revision. Overall task acceptance is blocked until the

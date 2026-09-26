@@ -264,17 +264,20 @@ def test_native_stage_checker_rejects_corruption_and_nonfinite():
         helper.internal_comparison({**expected, 'checkpoints': expected['checkpoints'].double()}, expected)
 
 
-def test_bd_comparison_requires_complete_matching_inputs_and_stage_bytes():
+@pytest.mark.parametrize('case_set', ('original_frozen_256', 'supplemental_dense_clamp'))
+def test_bd_comparison_requires_complete_matching_inputs_and_stage_bytes(case_set):
     import copy
     _, _, grid = refs()
+    if case_set == 'supplemental_dense_clamp':
+        grid = importlib.import_module('_pk05_test_ref.clamp_cases')
     helper = importlib.import_module('_pk05_test_ref.verification')
     schema = json.loads((ROOT / 'contract.json').read_text())
     rows = [dict(case=case, cpu_input_sha256={n: 'input' for n in schema['inputs']},
                  stage_sha256={n: 'stage' for n in schema['stages']},
                  public_sha256={n: 'output' for n in helper.NAMES},
                  public_schema={n: 'schema' for n in helper.NAMES}) for case in grid.cases()]
-    left = dict(block_dim=1, cases=rows, all_required_checks_complete=True)
-    right = dict(block_dim=2, cases=copy.deepcopy(rows), all_required_checks_complete=True)
+    left = dict(block_dim=1, case_set=case_set, cases=rows, all_required_checks_complete=True)
+    right = dict(block_dim=2, case_set=case_set, cases=copy.deepcopy(rows), all_required_checks_complete=True)
     assert helper.compare_runs(left, right)['all_byte_identical']
     for field in ('cpu_input_sha256', 'stage_sha256', 'public_sha256'):
         changed = copy.deepcopy(right)
@@ -288,3 +291,23 @@ def test_bd_comparison_requires_complete_matching_inputs_and_stage_bytes():
     right_partial = {**right, 'cases': right['cases'][:1]}
     with pytest.raises(ValueError, match='complete frozen'):
         helper.compare_runs(left_partial, right_partial)
+    with pytest.raises(ValueError, match='case sets'):
+        helper.compare_runs(left, {**right, 'case_set': 'different'})
+
+
+@pytest.mark.parametrize('mode', ('q', 'k', 'both'))
+def test_dense_clamp_still_has_ordinary_gradients_with_agreeing_references(mode):
+    ref, classification, _ = refs()
+    grid = importlib.import_module('_pk05_test_ref.clamp_cases')
+    oracle = importlib.import_module('_pk05_test_ref.oracle')
+    case = next(c for c in grid.cases() if c['T'] == 64 and c['mask'] == 7 and c['clamp_mode'] == mode)
+    xs, ds = grid.inputs(case)
+    a = oracle.autograd(*xs, **ds)
+    b = ref.analytical(*xs, **ds)
+    auxiliary = ref.analytical(*(x.double() for x in xs),
+                               **{n: x.double() for n, x in ds.items()},
+                               fp32_branch=True, auxiliary=True)
+    classes = classification.classify(auxiliary)
+    result = classification.compare(b, {'A': a}, classes)
+    assert result['ordinary_budget_satisfied']
+    assert all(result['gradients'][n]['ordinary_count'] > 0 for n in ('dq', 'dk'))

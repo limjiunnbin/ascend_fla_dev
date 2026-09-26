@@ -42,13 +42,18 @@ def main():
     parser.add_argument('--block-dim', type=int, choices=(1, 2), required=True)
     parser.add_argument('--case', action='append')
     parser.add_argument('--oracle-workers', type=int, choices=(1, 2, 4), default=1)
+    parser.add_argument('--supplemental-clamp', action='store_true')
     args = parser.parse_args()
     selected = cases()
+    make_inputs = inputs
+    if args.supplemental_clamp:
+        from ref.clamp_cases import cases as clamp_cases, inputs as clamp_inputs
+        selected, make_inputs = clamp_cases(), clamp_inputs
     if args.case and args.case != ['all']:
         selected = [c for c in selected if c['id'] in args.case]
         if {c['id'] for c in selected} != set(args.case):
             raise ValueError('Unknown case')
-    selected.sort(key=lambda c: 0 if c['id'] == 'full_r1_m7' else (1 if c['T'] <= 192 else 2))
+    selected.sort(key=lambda c: 0 if c['id'] in ('full_r1_m7', 'dense_full_both_m7') else (1 if c['T'] <= 192 else 2))
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(1)
     import torch_npu
@@ -68,6 +73,7 @@ def main():
         return outputs
 
     report = dict(stage='native_inprocess_classified_qualification', block_dim=args.block_dim,
+                  case_set='supplemental_dense_clamp' if args.supplemental_clamp else 'original_frozen_256',
                   torch=torch.__version__, torch_npu=torch_npu.__version__, oracle_workers=args.oracle_workers,
                   cases=[], numerical_status='pending', all_required_checks_complete=False)
 
@@ -138,7 +144,7 @@ def main():
     pending = deque()
     with ThreadPoolExecutor(max_workers=args.oracle_workers) as executor:
         for case in selected:
-            xs, ds = inputs(case)
+            xs, ds = make_inputs(case)
             cpu = {**dict(zip(INPUTS, xs)), **ds}
             future = executor.submit(references, cpu)
             gpu = {n: None if value is None else value.npu() for n, value in cpu.items()}
