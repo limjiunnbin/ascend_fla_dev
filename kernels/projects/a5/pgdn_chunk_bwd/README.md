@@ -1,9 +1,14 @@
 # PGDN FP32 chunk backward (PK-05)
 
-**Full requalification pending:** the original dense-at-clamp failure is
-retained below. The repair satisfies the three original failure cases and the
-first full T4096 case; the complete original and supplemental matrices plus
-new same-card measurements are still required. PR #134 remains a draft.
+**Full requalification pending:** the repair completed the supplemental73
+cases at bd1/bd2 with byte-identical stage/public outputs on the original
+environment. Its original256 bd1/bd2 numerical checks also completed, but
+foreign device contexts invalidate those two isolation receipts. They remain
+explicitly diagnostic evidence, not acceptance or timing. Alternate-environment
+full native qualification and new same-card measurements are still required;
+PR #134 remains a draft. Compiler/environment failures are retained separately,
+and `evidence/norm8-cpu-environment-diagnostic.json` records the located CPU
+probe correction without changing production, references or numerical budgets.
 
 This standalone A5/CCE unit computes `dq, dk, dv, dg_atk, dg, dbeta_atk,
 dbeta` for the loss `<do,o> + <dht,final_state> + <dA_T,final_A_state>`.
