@@ -7599,11 +7599,11 @@
       "backend": "cce",
       "stage": "board",
       "status": "failed",
-      "notes": "Numerical disclosure complete, nonPASS. Complete256 cases at each bd1/bd2 satisfy ordinary A/B budgets and all required stage/schema/branch/input checks; all20 stages and7 public gradients byte-identical. Actual inprocess device execution; other transport launchers remain untested."
+      "notes": "Numerical disclosure complete, nonPASS. Complete256 cases at each bd1/bd2 satisfy ordinary A/B budgets and all required stage/schema/branch/input checks; all20 stages and7 public gradients byte-identical. Actual inprocess device execution; other transport launchers remain untested. Supplemental dense-at-clamp cases fail ordinary dq/dk budgets; full task acceptance is blocked, not complete."
     }
   ],
   "qualification": {
-    "status": "complete_with_numerical_disclosure_nonpass",
+    "status": "blocked_dense_clamp_branch_failure",
     "reference_pilot": {
       "cases": 11,
       "ordinary_budget_satisfied": true,
@@ -7649,6 +7649,13 @@
       "repeat": 50,
       "evidence": "evidence/native/timing-bd2-v3/measurement.json",
       "baseline": "Same task-owned adjoint with saved normalization/ATK tapes and main chunk checkpoints; excludes all stage1/2 device computation, includes public validation and all pipeline allocation (including unused stage1/2 outputs)."
+    },
+    "supplemental_dense_clamp": {
+      "status": "failed",
+      "evidence": "evidence/native/dense-clamp-bd2-v3/diagnostic.json",
+      "budget_unchanged": true,
+      "frozen_references_unchanged": true,
+      "original_grid_results_retained": true
     }
   },
   "provenance": {

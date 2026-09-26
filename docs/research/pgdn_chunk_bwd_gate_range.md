@@ -1,5 +1,48 @@
 # PGDN FP32 backward: ABI, classification and range contract
 
+## Supplemental dense-clamp failure (acceptance blocked)
+
+Commit `c8e707337e0734113fa1c3a457c5318b4413dd48` fails a supported
+normalization boundary omitted from the original grid. At B1/T64/H1/HV2,
+FP32, all three cotangents, random dense q/k rows are normalized and scaled
+in FP32 to the clamp neighborhood. The frozen A/B classifier is unchanged.
+`diagnose_dense_clamp.py` reproduces q-only, k-only and both variants; it is a
+located diagnostic after the original complete native workloads, not a pass
+condition or a substitute for full acceptance.
+
+| Case | q branch differences / 64 | k branch differences / 64 | Ordinary dq relative L2 vs A | Ordinary dk relative L2 vs A |
+| --- | ---: | ---: | ---: | ---: |
+| q | 5 | 0 | 0.030137952029148613 | within budget |
+| k | 0 | 6 | within budget | 0.01377006123545162 |
+| both | 5 | 6 | 0.03013795074261903 | 0.013770060136453276 |
+
+A and B satisfy the frozen ordinary budget on all three cases. Public and
+composition outputs are byte-identical. Every actual gradient remains finite;
+ordinary errors exceed 1e-4 and are not reclassified as disclosure-only.
+Evidence: `evidence/native/dense-clamp-bd2-v3/diagnostic.json`, complete indexed
+public disclosures, source manifest and execution receipt under the unit.
+The driver returned zero and health checks were good, but the post-run empty
+condition was not met. During execution, 83 context samples included 73 with
+the owned process, two known owned-context retirement samples and zero
+unexplained foreign-context samples. This is a failed numerical diagnostic,
+not an exclusive acceptance or performance claim.
+
+The located first boundary is raw norm reduction in `kernels/atk.py`, whose
+`cadd` order differs from the selected literal CPU implementation before the
+`>= 1e-12` VJP branch. The literal Torch source at commit
+`7661cd9c6b841b62b7f411aa52ec51f05457263b`,
+[`ReduceOpsKernel.cpp`](https://github.com/pytorch/pytorch/blob/7661cd9c6b841b62b7f411aa52ec51f05457263b/aten/src/ATen/native/cpu/ReduceOpsKernel.cpp#L222),
+uses vector-lane accumulation followed by sequential lane addition. The
+accepted CPU environment reports AVX2. A separate CPU diagnostic over 8,192
+rows reproduces every literal norm bit with eight lanes and separately rounded
+multiply/add; fused or four/sixteen-lane variants differ. This is source and CPU
+evidence for repair design, not a native repair claim. Budgets, classifiers,
+near-zero input support, and the six frozen reference files remain unchanged.
+
+The earlier qualification and timing records below apply to their explicitly
+listed grid and source revision. Overall task acceptance is blocked until the
+new boundary and original workloads are revalidated after repair.
+
 PK-05 implements a standalone A5 backward entry; forward dispatch and autograd
 wiring are outside this task. The source authority is FLA
 `e52dbc0ea19d3a40d7ab7f9eed855d2b473994d2`,

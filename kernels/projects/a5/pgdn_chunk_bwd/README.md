@@ -1,5 +1,10 @@
 # PGDN FP32 chunk backward (PK-05)
 
+**Acceptance blocked:** supplemental dense-at-clamp cases expose ordinary dq/dk
+errors above the frozen budget. PR #134 remains a draft. The original 256-case
+results below are historical grid evidence, not completed domain qualification.
+See the dense-clamp failure section in the range study.
+
 This standalone A5/CCE unit computes `dq, dk, dv, dg_atk, dg, dbeta_atk,
 dbeta` for the loss `<do,o> + <dht,final_state> + <dA_T,final_A_state>`.
 At least one cotangent must be supplied. The public adapter is
