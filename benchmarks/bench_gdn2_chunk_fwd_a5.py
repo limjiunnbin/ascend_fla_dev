@@ -36,6 +36,11 @@ DTYPES = {"float32": torch.float32, "bfloat16": torch.bfloat16}
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--baseline", choices=("torch_npu", "fp32_path"), default="torch_npu",
+                        help=("torch_npu: the same recurrence composed from native operators on the "
+                              "device, which is the comparison AGENTS.md section 6 asks for. "
+                              "fp32_path: this operator's own FP32 path, useful only for comparing "
+                              "two dtype paths against each other."))
     parser.add_argument("--dtype", choices=sorted(DTYPES), default="float32",
                         help="public q/k/v dtype; FP32 and BF16 are separate operator sets")
     parser.add_argument("--seq-len", type=int, default=1024)
@@ -63,6 +68,78 @@ def make_inputs(dtype, seq_len, heads, seed, device="npu"):
     w = torch.rand(shape, generator=generator).to(device)               # within [0, 1]
     state = (torch.randn(1, heads, 128, 128, generator=generator) * 0.1).to(device)
     return q, k, v, gate, erase_gate, w, state
+
+
+QK_EPS = 1e-6
+Q_SCALE = 128 ** -0.5
+
+
+def machine_witness():
+    """Whether the machine was quiet, recorded with the timings.
+
+    Absolute milliseconds from a shared box mean nothing on their own: a constant lift affects every
+    round equally and a sandwich cannot see it. This records what else was running so a reader can
+    judge, and so a suspicious number can be re-examined rather than inherited.
+    """
+    import subprocess
+    witness = {}
+    try:
+        out = subprocess.run(["npu-smi", "info"], capture_output=True, text=True, timeout=30).stdout
+        witness["npu_smi_available"] = bool(out.strip())
+        witness["npu_smi_health_lines"] = [line.strip() for line in out.splitlines()
+                                           if "Ascend" in line][:8]
+    except Exception as exc:                                   # no npu-smi on some A5 hosts
+        witness["npu_smi_available"] = False
+        witness["npu_smi_error"] = str(exc)[:120]
+    try:
+        procs = subprocess.run(["ps", "-eo", "cmd", "--no-headers"],
+                               capture_output=True, text=True, timeout=30).stdout.splitlines()
+        busy = [p.strip()[:80] for p in procs
+                if "python" in p and "bench_gdn2" not in p and "defunct" not in p]
+        witness["other_python_processes"] = len(busy)
+        witness["other_python_sample"] = busy[:3]
+    except Exception as exc:
+        witness["other_python_processes"] = None
+        witness["ps_error"] = str(exc)[:120]
+    return witness
+
+
+def torch_npu_composed(q, k, v, gate, erase_gate, w, state):
+    """The same recurrence built from native operators, run on the device.
+
+    This is the second of the two oracles AGENTS.md section 6 requires: not our compiled kernel and
+    not a CPU reference, but what a caller would write with torch_npu alone. It is the honest
+    baseline for "is the kernel worth having", and it is deliberately the straightforward
+    token-at-a-time form, because that is what the operator replaces.
+    """
+    q32, k32, v32 = q.float(), k.float(), v.float()
+    qn = q32 * torch.rsqrt(q32.square().sum(-1, keepdim=True) + QK_EPS) * Q_SCALE
+    kn = k32 * torch.rsqrt(k32.square().sum(-1, keepdim=True) + QK_EPS)
+    current = state.clone()
+    outputs = []
+    for index in range(q.shape[1]):
+        k_t = kn[:, index]
+        current = current * torch.exp(gate[:, index]).unsqueeze(-1)
+        erase = torch.matmul((erase_gate[:, index] * k_t).unsqueeze(-2), current).squeeze(-2)
+        delta = w[:, index] * v32[:, index] - erase
+        current = current + k_t.unsqueeze(-1) * delta.unsqueeze(-2)
+        outputs.append(torch.matmul(qn[:, index].unsqueeze(-2), current).squeeze(-2))
+    return torch.stack(outputs, dim=1), current
+
+
+def time_baseline(tensors, reps, warmup):
+    for _ in range(warmup):
+        torch_npu_composed(*tensors)
+    torch.npu.synchronize()
+    samples = []
+    for _ in range(reps):
+        start = time.perf_counter()
+        torch_npu_composed(*tensors)
+        torch.npu.synchronize()
+        samples.append((time.perf_counter() - start) * 1e3)
+    samples.sort()
+    return {"median_ms": statistics.median(samples), "min_ms": samples[0],
+            "p90_ms": samples[max(0, int(0.9 * len(samples)) - 1)], "reps": reps}
 
 
 def time_round(chunk_gdn2, tensors, block_dim, reps, warmup):
@@ -95,12 +172,18 @@ def main(argv=None):
     candidate_inputs = (baseline_inputs if dtype is torch.float32
                         else make_inputs(dtype, args.seq_len, args.heads, args.seed))
 
+    use_torch_npu = args.baseline == "torch_npu"
+    identity = ("the same recurrence composed from native torch_npu operators"
+                if use_torch_npu else "the FP32 path of this same operator")
     plan = (("baseline", torch.float32, baseline_inputs),
             ("candidate", dtype, candidate_inputs),
             ("baseline", torch.float32, baseline_inputs))
     rounds = []
     for index, (role, round_dtype, tensors) in enumerate(plan, start=1):
-        row = time_round(chunk_gdn2, tensors, args.block_dim, args.reps, args.warmup)
+        if role == "baseline" and use_torch_npu:
+            row = time_baseline(tensors, args.reps, args.warmup)
+        else:
+            row = time_round(chunk_gdn2, tensors, args.block_dim, args.reps, args.warmup)
         row.update(round=index, role=role, dtype=str(round_dtype).replace("torch.", ""),
                    seq_len=args.seq_len, heads=args.heads, block_dim=args.block_dim)
         rounds.append(row)
@@ -111,14 +194,16 @@ def main(argv=None):
     candidate = [row["median_ms"] for row in rounds if row["role"] == "candidate"][0]
     baseline = statistics.median(baselines)
     drift = abs(baselines[0] - baselines[1]) / baseline
-    receipt = {"rounds": rounds,
-               "baseline_identity": "the FP32 path of this same operator",
+    receipt = {"rounds": rounds, "baseline_identity": identity,
                "baseline_median_ms": baseline, "candidate_median_ms": candidate,
                "baseline_round_drift": drift,
                "ratio_candidate_over_baseline": candidate / baseline,
-               "note": ("No speed target is set. If baseline_round_drift is comparable to the "
-                        "candidate/baseline difference then the machine moved and the comparison "
-                        "says nothing.")}
+               "machine_witness": machine_witness(),
+               "note": ("No speed target is set. baseline_round_drift catches the machine moving "
+                        "during the run; it does NOT catch a constant lift applied to every round. "
+                        "A BF-05 measurement on this operator read 43 ms where a rerun of the same "
+                        "script on the same card read 3.3 ms, with the ratio intact, so absolute "
+                        "timings need machine_witness to be believed, while ratios survive.")}
     print(f"\nbaseline median {baseline:.3f} ms (the two rounds differ by {drift * 100:.2f}%)")
     print(f"candidate median {candidate:.3f} ms   "
           f"ratio {receipt['ratio_candidate_over_baseline']:.3f}")
