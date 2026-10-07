@@ -1,0 +1,48 @@
+{
+  "cache_check": {
+    "max_abs_diff": 0.0,
+    "relative_l2": 0.0,
+    "seconds": 0.6174381619784981
+  },
+  "cache_layers": 18,
+  "checkpoint": "checkpoint-95B-model-ckpt.pth",
+  "checkpoint_bytes": 17401727659,
+  "checkpoint_metadata": {
+    "iter_num": 725344,
+    "step_count": 22667
+  },
+  "core_backend": "torch",
+  "device": "npu:0",
+  "dtype": "torch.float32",
+  "forward_seconds": 1.9847742379643023,
+  "input_shape": [
+    1,
+    8
+  ],
+  "last_token_argmax": 3715,
+  "load_seconds": 52.10682575707324,
+  "logits_finite": true,
+  "logits_max": 11.047235488891602,
+  "logits_min": -11.814846992492676,
+  "logits_shape": [
+    1,
+    8,
+    32000
+  ],
+  "npu_memory": {
+    "allocated_bytes": 5836611072,
+    "reserved_bytes": 5947523072
+  },
+  "parameter_count": 1450096416,
+  "parameter_dtypes": {
+    "torch.float32": 1450096416
+  },
+  "projection_layout": "canonical",
+  "recurrent_state_shape": [
+    1,
+    16,
+    128,
+    128
+  ],
+  "reported_parameter_count": 1302638112
+}

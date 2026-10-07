@@ -1,0 +1,4 @@
+path string is NULLpath string is NULLt64_h16_real         o=bitwise(8cf24e8dfee90740) final_state=bitwise(60a928907bdbf4da)
+t65_h16_tail         o=bitwise(eee82750891b055a) final_state=bitwise(0336c852d8354b73)
+t192_h16_odd         o=bitwise(090faf0956eec21f) final_state=bitwise(a1020c6bf09bc473)
+ALL BITWISE EQUAL

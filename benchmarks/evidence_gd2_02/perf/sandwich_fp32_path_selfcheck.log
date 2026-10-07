@@ -1,0 +1,6 @@
+round 1 baseline  float32  median    3.316 ms  min    3.289  p90    3.474
+round 2 candidate float32  median    3.297 ms  min    3.291  p90    3.312
+round 3 baseline  float32  median    3.309 ms  min    3.289  p90    3.444
+
+baseline median 3.312 ms (the two rounds differ by 0.20%)
+candidate median 3.297 ms   ratio 0.995

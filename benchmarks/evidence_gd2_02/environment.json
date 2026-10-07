@@ -1,0 +1,22 @@
+{
+ "builtin_op_packages": [
+  "ascend910_93",
+  "ascend910b",
+  "ascend950"
+ ],
+ "cann": "9.2.0",
+ "checkpoint": {
+  "bytes": 17401727659,
+  "file": "checkpoint-95B-model-ckpt.pth",
+  "sha256": "4ac729c627febc431bf4b2011a9cb7ad9c30cc1d017ff74aeca15f76efb2df6d",
+  "verified_against": "docs/matrix/models.json and GD2-01's pinned constant"
+ },
+ "compiler": "2026-08-04T16:57:23+08:00 clang 15.0.5 (clang-5c68a1cb1231)",
+ "device_selection": "Physical card 1, locks verified unheld before each run. No npu-smi on this host, so health was probed with a minimal torch matmul.",
+ "host": "the second A5 machine in machine_specs.md",
+ "note": "The other A5 host has a different compiler build (2026-05-09), so machine_specs.md forbids carrying kernel qualification between them. Everything here is this host.",
+ "python": "3.12.13",
+ "soc": "Ascend950PR",
+ "torch": "2.12.0+cpu",
+ "torch_npu": "2.12.0"
+}

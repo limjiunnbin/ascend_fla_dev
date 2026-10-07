@@ -1,0 +1,54 @@
+{
+ "baseline_identity": "the same recurrence composed from native torch_npu operators",
+ "baseline_median_ms": 66.5429950458929,
+ "baseline_round_drift": 0.06061560447059152,
+ "candidate_median_ms": 1.0895479936152697,
+ "machine_witness": {
+  "npu_smi_available": false,
+  "npu_smi_error": "[Errno 2] No such file or directory: 'npu-smi'",
+  "other_python_processes": 1,
+  "other_python_sample": [
+   "bash -c  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi"
+  ]
+ },
+ "note": "No speed target is set. baseline_round_drift catches the machine moving during the run; it does NOT catch a constant lift applied to every round. A BF-05 measurement on this operator read 43 ms where a rerun of the same script on the same card read 3.3 ms, with the ratio intact, so absolute timings need machine_witness to be believed, while ratios survive.",
+ "ratio_candidate_over_baseline": 0.016373594138103312,
+ "rounds": [
+  {
+   "block_dim": 8,
+   "dtype": "float32",
+   "heads": 16,
+   "median_ms": 68.55976697988808,
+   "min_ms": 65.2826358564198,
+   "p90_ms": 70.76059514656663,
+   "reps": 5,
+   "role": "baseline",
+   "round": 1,
+   "seq_len": 256
+  },
+  {
+   "block_dim": 8,
+   "dtype": "float32",
+   "heads": 16,
+   "median_ms": 1.0895479936152697,
+   "min_ms": 1.0684391018003225,
+   "p90_ms": 1.095819054171443,
+   "reps": 5,
+   "role": "candidate",
+   "round": 2,
+   "seq_len": 256
+  },
+  {
+   "block_dim": 8,
+   "dtype": "float32",
+   "heads": 16,
+   "median_ms": 64.5262231118977,
+   "min_ms": 64.40158281475306,
+   "p90_ms": 64.65384480543435,
+   "reps": 5,
+   "role": "baseline",
+   "round": 3,
+   "seq_len": 256
+  }
+ ]
+}
